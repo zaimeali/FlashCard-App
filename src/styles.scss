@@ -1,1 +1,151 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=DM+Sans:wght@400;500&family=JetBrains+Mono&display=swap');
+
+// ─── Material Theme ───────────────────────────────────────────────────────────
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$green-palette,
+        tertiary: mat.$cyan-palette,
+        theme-type: dark,
+      ),
+      typography: (
+        brand-family: 'Sora',
+        plain-family: 'DM Sans',
+      ),
+      density: 0,
+    )
+  );
+}
+
+// ─── Body ─────────────────────────────────────────────────────────────────────
+
+body {
+  color-scheme: dark;
+
+  // Override Material 3 system tokens with exact hex values
+  --mat-sys-primary:              #22C55E;
+  --mat-sys-on-primary:           #F1F5F9;
+  --mat-sys-primary-container:    #14291E;
+  --mat-sys-on-primary-container: #4ADE80;
+
+  --mat-sys-secondary:              #4ADE80;
+  --mat-sys-on-secondary:           #1C1C1E;
+  --mat-sys-secondary-container:    #1A2E1E;
+  --mat-sys-on-secondary-container: #34D399;
+
+  --mat-sys-tertiary:              #34D399;
+  --mat-sys-on-tertiary:           #1C1C1E;
+  --mat-sys-tertiary-container:    #12261E;
+  --mat-sys-on-tertiary-container: #6EE7B7;
+
+  --mat-sys-error:              #F87171;
+  --mat-sys-on-error:           #F1F5F9;
+  --mat-sys-error-container:    #2E1A1A;
+  --mat-sys-on-error-container: #FCA5A5;
+
+  --mat-sys-surface:          #242426;
+  --mat-sys-on-surface:       #F1F5F9;
+  --mat-sys-surface-variant:  #2E2E32;
+  --mat-sys-on-surface-variant: #9CA3AF;
+
+  --mat-sys-background:       #1C1C1E;
+  --mat-sys-on-background:    #F1F5F9;
+
+  --mat-sys-outline:          #2E2E30;
+  --mat-sys-outline-variant:  #3A3A3E;
+
+  background-color: var(--mat-sys-background);
+  color: var(--mat-sys-on-surface);
+  font-family: 'DM Sans', sans-serif;
+  margin: 0;
+  height: 100%;
+}
+
+// ─── App CSS Variables ────────────────────────────────────────────────────────
+
+:root {
+  --fc-bg:      #1C1C1E;
+  --fc-surface: #242426;
+  --fc-card:    #2E2E32;
+  --fc-border:  #2E2E30;
+  --fc-primary: #22C55E;
+  --fc-accent:  #4ADE80;
+  --fc-text:    #F1F5F9;
+  --fc-muted:   #9CA3AF;
+  --fc-success: #34D399;
+  --fc-danger:  #F87171;
+  --fc-warn:    #FBBF24;
+
+  --fc-font-heading: 'Sora', sans-serif;
+  --fc-font-body:    'DM Sans', sans-serif;
+  --fc-font-mono:    'JetBrains Mono', monospace;
+}
+
+// ─── Typography ───────────────────────────────────────────────────────────────
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--fc-font-heading);
+  color: var(--fc-text);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+p, span, label, button {
+  font-family: var(--fc-font-body);
+}
+
+code, pre {
+  font-family: var(--fc-font-mono);
+  color: var(--fc-accent);
+}
+
+// ─── Angular Material Overrides ───────────────────────────────────────────────
+
+.mat-mdc-card {
+  background-color: var(--fc-card) !important;
+  color: var(--fc-text) !important;
+  border: 0.5px solid var(--fc-border) !important;
+}
+
+.mat-mdc-raised-button.mat-primary {
+  background-color: var(--fc-primary) !important;
+  color: #1C1C1E !important;
+}
+
+.mat-mdc-outlined-button.mat-primary {
+  border-color: var(--fc-primary) !important;
+  color: var(--fc-primary) !important;
+}
+
+.mat-mdc-form-field {
+  --mdc-outlined-text-field-outline-color: var(--fc-border);
+  --mdc-outlined-text-field-focus-outline-color: var(--fc-primary);
+  --mdc-outlined-text-field-label-text-color: var(--fc-muted);
+  --mdc-outlined-text-field-input-text-color: var(--fc-text);
+}
+
+.mat-mdc-dialog-container {
+  --mdc-dialog-container-color: var(--fc-card);
+  --mdc-dialog-supporting-text-color: var(--fc-text);
+}
+
+.mat-toolbar {
+  background-color: var(--fc-surface) !important;
+  color: var(--fc-text) !important;
+  border-bottom: 0.5px solid var(--fc-border);
+}
+
+.mat-drawer-container,
+.mat-sidenav-container {
+  background-color: var(--fc-bg) !important;
+}
+
+.mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color: var(--fc-card);
+  --mdc-snackbar-supporting-text-color: var(--fc-text);
+}
