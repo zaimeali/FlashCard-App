@@ -22,7 +22,7 @@ export class App {
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd)
     ).subscribe(event => {
-      this.isLoginPage.set(event.urlAfterRedirects === '/' || event.urlAfterRedirects === '/login');
+      this.isLoginPage.set(event.urlAfterRedirects === '/login');
     });
   }
 }
