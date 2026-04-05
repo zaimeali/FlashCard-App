@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Register } from './register';
+import { CreateGroup } from './create-group';
 
-describe('Register', () => {
-  let component: Register;
-  let fixture: ComponentFixture<Register>;
+describe('CreateGroup', () => {
+  let component: CreateGroup;
+  let fixture: ComponentFixture<CreateGroup>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Register],
+      imports: [CreateGroup],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Register);
+    fixture = TestBed.createComponent(CreateGroup);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

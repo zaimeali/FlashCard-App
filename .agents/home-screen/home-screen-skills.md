@@ -24,6 +24,7 @@ design:
         - It should also have a icon on the right side.
         - It should have a primary color.
         - It should have a hover effect.
+        - When clicked, it should navigate to the create group screen - `/flashcards/create-group` - `src/app/components/flashcards/create-group/create-group.ts`.
    - Search bar in the middle - use Material UI search bar.
    - "Total Cards: <number>" on the right - group cards created by user.
 2. Show main content area at the bottom of the screen.

@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>{{ data.isEdit ? 'Edit Flashcard' : 'Add Flashcard' }}</h2>
+<div class="heading-separator"></div>
+<mat-dialog-content class="dialog-content">
+  <form [formGroup]="flashcardForm">
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+        <mat-label>Question</mat-label>
+        <input matInput formControlName="question" placeholder="Enter question" maxlength="50">
+        <mat-hint align="end">{{ flashcardForm.get('question')?.value?.length || 0 }}/50</mat-hint>
+        <mat-error *ngIf="flashcardForm.get('question')?.hasError('required')">Question is required</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+        <mat-label>Answer</mat-label>
+        <textarea matInput formControlName="answer" placeholder="Enter answer" rows="3" maxlength="200"></textarea>
+        <mat-hint align="end">{{ flashcardForm.get('answer')?.value?.length || 0 }}/200</mat-hint>
+        <mat-error *ngIf="flashcardForm.get('answer')?.hasError('required')">Answer is required</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="hints-section">
+      <div class="hints-header">
+        <h3>Hints (Max 3)</h3>
+        <button mat-flat-button color="primary" type="button" [disabled]="hints().length >= maxHints"
+          (click)="addHint()">
+          <mat-icon>add</mat-icon> Add Hint
+        </button>
+      </div>
+
+      <div class="hints-list">
+        <div *ngFor="let hint of hints(); let i = index; trackBy: trackByFn" class="hint-item">
+          <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+            <mat-label>Hint {{ i + 1 }}</mat-label>
+            <input matInput [value]="hint" (input)="updateHint(i, $event)" placeholder="Enter hint" maxlength="50">
+            <mat-hint align="end">{{ hint.length }}/50</mat-hint>
+            <button mat-icon-button matSuffix type="button" color="warn" (click)="removeHint(i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<div class="footer-divider"></div>
+<mat-dialog-actions align="center">
+  <button mat-button type="button" (click)="onCancel()" class="cancel-btn">
+    Cancel
+  </button>
+  <button mat-raised-button color="primary" type="submit" [disabled]="!isFormValid()" (click)="onSave()"
+    class="save-btn">
+    {{ data.isEdit ? 'Update' : 'Add' }} Flashcard
+  </button>
+</mat-dialog-actions>

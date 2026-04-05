@@ -1,0 +1,82 @@
+.heading-separator,
+.footer-divider {
+  height: 1px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.1), var(--fc-border), rgba(255, 255, 255, 0.1));
+  margin: 0 1.5rem;
+  opacity: 0.8;
+}
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem; /* Drastically reduced gap */
+  padding: 1.25rem 1.5rem;
+  max-width: 540px;
+  overflow: visible !important;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-row {
+  margin-bottom: 0; /* Removed bottom margin */
+  padding-top: 0.75rem;
+
+  textarea {
+    resize: none;
+  }
+}
+
+.hints-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.hints-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--fc-muted);
+  }
+}
+
+.hints-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* No gap */
+}
+
+.hint-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: -0.5rem; /* Slight overlap to compensate for internal padding */
+}
+
+.cancel-btn {
+  margin-right: 0.75rem;
+  color: var(--fc-danger) !important;
+}
+
+.save-btn {
+  min-width: 140px;
+  border-radius: 2rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+
+  &:disabled {
+    background-color: var(--fc-border) !important;
+    color: var(--fc-muted) !important;
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none !important;
+  }
+}

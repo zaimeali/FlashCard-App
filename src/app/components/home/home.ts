@@ -26,8 +26,8 @@ import { FormsModule } from '@angular/forms';
   animations: [
     trigger('cardAnimation', [
       transition(':leave', [
-        animate('500ms cubic-bezier(0.2, 0, 0, 1)', style({ 
-          opacity: 0, 
+        animate('500ms cubic-bezier(0.2, 0, 0, 1)', style({
+          opacity: 0,
           transform: 'scale(0.5)',
           width: '0px',
           'min-width': '0px',
@@ -110,7 +110,7 @@ export class Home {
   saveEdit() {
     const id = this.editingGroupId();
     if (id) {
-      this.groups = this.groups.map(g => 
+      this.groups = this.groups.map(g =>
         g.id === id ? { ...g, name: this.editName(), description: this.editDescription() } : g
       );
     }
@@ -120,5 +120,9 @@ export class Home {
   openGroup(group: any) {
     if (this.editingGroupId() === group.id) return; // Don't navigate while editing
     this.router.navigate(['/flashcards', group.id]);
+  }
+
+  createGroup() {
+    this.router.navigate(['/flashcards/create/group']);
   }
 }

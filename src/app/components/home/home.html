@@ -12,7 +12,7 @@
             </div>
             <div class="fc-header-right">
                 <span class="fc-total-cards-label">Total cards: {{ totalCards }}</span>
-                <button mat-raised-button color="primary" class="fc-create-group-btn">
+                <button mat-raised-button color="primary" class="fc-create-group-btn" (click)="createGroup()">
                     Create Group <mat-icon iconPositionEnd>add</mat-icon>
                 </button>
             </div>
@@ -22,23 +22,27 @@
             <mat-card class="fc-group-card" (click)="openGroup(group)" tabindex="0" role="button" @cardAnimation>
                 <div class="fc-card-header-row">
                     @if (editingGroupId() === group.id) {
-                        <input class="fc-edit-input title" [(ngModel)]="editName" (click)="$event.stopPropagation()" autoFocus>
+                    <input class="fc-edit-input title" [(ngModel)]="editName" (click)="$event.stopPropagation()"
+                        autoFocus>
                     } @else {
-                        <mat-card-title class="fc-card-title" title="{{ group.name }}">{{ group.name }}</mat-card-title>
+                    <mat-card-title class="fc-card-title" title="{{ group.name }}">{{ group.name }}</mat-card-title>
                     }
-                    
+
                     <div class="fc-card-actions">
                         @if (editingGroupId() === group.id) {
-                            <button mat-icon-button class="fc-action-btn save" (click)="saveEdit(); $event.stopPropagation()" aria-label="Save">
-                                <mat-icon>check</mat-icon>
-                            </button>
-                            <button mat-icon-button class="fc-action-btn cancel" (click)="cancelEdit(); $event.stopPropagation()" aria-label="Cancel">
-                                <mat-icon>close</mat-icon>
-                            </button>
+                        <button mat-icon-button class="fc-action-btn save"
+                            (click)="saveEdit(); $event.stopPropagation()" aria-label="Save">
+                            <mat-icon>check</mat-icon>
+                        </button>
+                        <button mat-icon-button class="fc-action-btn cancel"
+                            (click)="cancelEdit(); $event.stopPropagation()" aria-label="Cancel">
+                            <mat-icon>close</mat-icon>
+                        </button>
                         } @else {
-                            <button mat-icon-button class="fc-card-options-btn" (click)="$event.stopPropagation()" [matMenuTriggerFor]="cardMenu" aria-label="Card options">
-                                <mat-icon>more_vert</mat-icon>
-                            </button>
+                        <button mat-icon-button class="fc-card-options-btn" (click)="$event.stopPropagation()"
+                            [matMenuTriggerFor]="cardMenu" aria-label="Card options">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
                         }
                     </div>
 
@@ -55,9 +59,10 @@
                 </div>
                 <mat-card-content>
                     @if (editingGroupId() === group.id) {
-                        <textarea class="fc-edit-input description" [(ngModel)]="editDescription" (click)="$event.stopPropagation()"></textarea>
+                    <textarea class="fc-edit-input description" [(ngModel)]="editDescription"
+                        (click)="$event.stopPropagation()"></textarea>
                     } @else {
-                        <p>{{ group.description }}</p>
+                    <p>{{ group.description }}</p>
                     }
                     <p class="fc-card-count">{{ group.cardCount }} cards</p>
                 </mat-card-content>
