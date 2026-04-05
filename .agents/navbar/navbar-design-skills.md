@@ -1,6 +1,6 @@
 ---
 name: navbar-design-skills
-description: Implementation guide for the navbar of the Flash Card App.
+description: Implementation design guide for the navbar of the Flash Card App.
 applies_to: 
   - src/app/components/navbar/navbar.html
   - src/app/components/navbar/navbar.scss
