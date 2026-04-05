@@ -18,26 +18,47 @@
             </div>
         </div>
         <div class="fc-group-list">
-            @for (group of visibleGroups; track group) {
-            <mat-card class="fc-group-card" (click)="openGroup(group)" tabindex="0" role="button">
+            @for (group of visibleGroups; track group.id) {
+            <mat-card class="fc-group-card" (click)="openGroup(group)" tabindex="0" role="button" @cardAnimation>
                 <div class="fc-card-header-row">
-                    <mat-card-title class="fc-card-title" title="{{ group.name }}">{{ group.name }}</mat-card-title>
-                    <button mat-icon-button class="fc-card-options-btn" (click)="$event.stopPropagation()" [matMenuTriggerFor]="cardMenu" aria-label="Card options">
-                        <mat-icon>more_vert</mat-icon>
-                    </button>
+                    @if (editingGroupId() === group.id) {
+                        <input class="fc-edit-input title" [(ngModel)]="editName" (click)="$event.stopPropagation()" autoFocus>
+                    } @else {
+                        <mat-card-title class="fc-card-title" title="{{ group.name }}">{{ group.name }}</mat-card-title>
+                    }
+                    
+                    <div class="fc-card-actions">
+                        @if (editingGroupId() === group.id) {
+                            <button mat-icon-button class="fc-action-btn save" (click)="saveEdit(); $event.stopPropagation()" aria-label="Save">
+                                <mat-icon>check</mat-icon>
+                            </button>
+                            <button mat-icon-button class="fc-action-btn cancel" (click)="cancelEdit(); $event.stopPropagation()" aria-label="Cancel">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        } @else {
+                            <button mat-icon-button class="fc-card-options-btn" (click)="$event.stopPropagation()" [matMenuTriggerFor]="cardMenu" aria-label="Card options">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                        }
+                    </div>
+
                     <mat-menu #cardMenu="matMenu">
-                        <button mat-menu-item (click)="$event.stopPropagation()">
+                        <button mat-menu-item (click)="startEdit(group); $event.stopPropagation()">
                             <mat-icon>edit</mat-icon>
                             <span>Edit</span>
                         </button>
-                        <button mat-menu-item (click)="$event.stopPropagation()">
+                        <button mat-menu-item (click)="deleteGroup(group.id); $event.stopPropagation()">
                             <mat-icon>delete</mat-icon>
                             <span>Delete</span>
                         </button>
                     </mat-menu>
                 </div>
                 <mat-card-content>
-                    <p>{{ group.description }}</p>
+                    @if (editingGroupId() === group.id) {
+                        <textarea class="fc-edit-input description" [(ngModel)]="editDescription" (click)="$event.stopPropagation()"></textarea>
+                    } @else {
+                        <p>{{ group.description }}</p>
+                    }
                     <p class="fc-card-count">{{ group.cardCount }} cards</p>
                 </mat-card-content>
             </mat-card>

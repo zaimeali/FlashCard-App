@@ -29,6 +29,8 @@ design:
 2. Show main content area at the bottom of the screen.
 3. Scroll bar should not appear on the `body`.
 
+---
+
 ### 2. Main Content Layout
 
 **Trigger:** User opens the home screen.
@@ -40,6 +42,8 @@ design:
 4. Should use `mat-card` for the card structure.
 5. Should have a scrollbar appears when exceeds height viewport.
 6. "Load more" button should be at the bottom of the page.
+
+---
 
 ### 3. Card Design
 
@@ -80,6 +84,8 @@ design:
 6. Card should have a tabindex effect on hover and focus.
 7. Card should have a role effect on hover and focus.
 
+---
+
 ### 4. Load More Groups
 
 **Trigger:** User clicks "Load More" button on home screen.
@@ -88,3 +94,13 @@ design:
 1. On the action of load more, it should add 2 more rows in the viewport and scrollbar should appear.
 2. Hide "Load More" button if all groups are loaded.
 3. Scroll bar should not appear on the `body`.
+
+---
+
+### 5. View Flashcard Group
+
+**Trigger:** User clicks on a group card.
+
+**Action:**
+1. Navigate to the flashcards screen - `/flashcards/:id`.
+2. Show the flashcards of the selected group.

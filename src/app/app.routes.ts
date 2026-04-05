@@ -3,6 +3,7 @@ import { Login } from './components/auth/login/login';
 import { Home } from './components/home/home';
 import { Dashboard } from './components/dashboard/dashboard';
 import { Profile } from './components/auth/profile/profile';
+import { Flashcards } from './components/flashcards/flashcards';
 
 export const routes: Routes = [
     {
@@ -20,5 +21,9 @@ export const routes: Routes = [
     {
         path: 'profile',
         component: Profile
+    },
+    {
+        path: 'flashcards/:id',
+        component: Flashcards
     }
 ];
