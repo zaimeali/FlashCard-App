@@ -1,0 +1,19 @@
+<mat-toolbar class="fc-navbar" color="primary">
+    <div class="fc-navbar-left" routerLink="/">
+        <img src="/logo.svg" alt="Logo" class="fc-logo-icon" />
+        <span class="fc-logo-text">FlashCard</span>
+    </div>
+
+    <!-- Motto Text in the middle -->
+    <div class="fc-navbar-middle">
+        <span class="fc-motto">Learn Smarter, Not Harder</span>
+    </div>
+
+    <div class="fc-navbar-right">
+        <button mat-button class="fc-nav-btn primary-colored" routerLink="/home" routerLinkActive="active-link">My
+            Groups</button>
+        <button mat-button class="fc-nav-btn primary-colored" routerLink="/profile"
+            routerLinkActive="active-link">Profile</button>
+        <button mat-button class="fc-nav-btn fc-warn-btn" routerLink="/">Logout</button>
+    </div>
+</mat-toolbar>

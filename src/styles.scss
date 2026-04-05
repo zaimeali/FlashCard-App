@@ -6,6 +6,7 @@
 
 html {
   height: 100%;
+  overflow: hidden;
   @include mat.theme(
     (
       color: (
@@ -26,6 +27,8 @@ html {
 
 body {
   color-scheme: dark;
+  overflow: hidden;
+  height: 100vh;
 
   // Override Material 3 system tokens with exact hex values
   --mat-sys-primary:              #22C55E;

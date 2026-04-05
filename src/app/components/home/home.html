@@ -1,1 +1,52 @@
-<p>home works!</p>
+<main class="fc-main">
+    <section class="fc-groups">
+        <div class="fc-header">
+            <div class="fc-header-left">
+                <h1>Your Flashcards</h1>
+            </div>
+            <div class="fc-header-middle">
+                <mat-form-field appearance="outline" class="fc-search-bar" subscriptSizing="dynamic">
+                    <mat-icon matPrefix>search</mat-icon>
+                    <input matInput placeholder="Search groups...">
+                </mat-form-field>
+            </div>
+            <div class="fc-header-right">
+                <span class="fc-total-cards-label">Total cards: {{ totalCards }}</span>
+                <button mat-raised-button color="primary" class="fc-create-group-btn">
+                    Create Group <mat-icon iconPositionEnd>add</mat-icon>
+                </button>
+            </div>
+        </div>
+        <div class="fc-group-list">
+            @for (group of visibleGroups; track group) {
+            <mat-card class="fc-group-card" (click)="openGroup(group)" tabindex="0" role="button">
+                <div class="fc-card-header-row">
+                    <mat-card-title class="fc-card-title" title="{{ group.name }}">{{ group.name }}</mat-card-title>
+                    <button mat-icon-button class="fc-card-options-btn" (click)="$event.stopPropagation()" [matMenuTriggerFor]="cardMenu" aria-label="Card options">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #cardMenu="matMenu">
+                        <button mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-icon>edit</mat-icon>
+                            <span>Edit</span>
+                        </button>
+                        <button mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-icon>delete</mat-icon>
+                            <span>Delete</span>
+                        </button>
+                    </mat-menu>
+                </div>
+                <mat-card-content>
+                    <p>{{ group.description }}</p>
+                    <p class="fc-card-count">{{ group.cardCount }} cards</p>
+                </mat-card-content>
+            </mat-card>
+            }
+            @if (canLoadMore) {
+            <div class="fc-load-more-row">
+                <button mat-raised-button color="primary" (click)="loadMore()">Load More</button>
+            </div>
+            }
+        </div>
+    </section>
+</main>
