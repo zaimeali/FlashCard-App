@@ -1,1 +1,67 @@
-<p>flashcards works!</p>
+<div class="fc-flashcards-page">
+  <div class="fc-title-bar">
+    <h2>Biology Flashcards</h2>
+    <p>Total Flashcards: {{ totalCards }}</p>
+  </div>
+
+  <div class="fc-main-content">
+    
+    <div class="fc-carousel-wrapper">
+      <button class="fc-nav-arrow arrow-left" mat-icon-button color="primary" [disabled]="currentIndex() === 0" (click)="prevCard()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+
+      <div class="fc-carousel">
+        @for (card of flashcardsMockData; track card.id; let i = $index) {
+          <app-flashcard
+            [cardData]="card"
+            [active]="i === currentIndex()"
+            class="carousel-card"
+            [ngClass]="{
+              'active': i === currentIndex(),
+              'prev': i === currentIndex() - 1,
+              'next': i === currentIndex() + 1,
+              'hidden-left': i < currentIndex() - 1,
+              'hidden-right': i > currentIndex() + 1
+            }"
+            (correct)="handleCorrect()"
+            (incorrect)="handleIncorrect()"
+            (skip)="handleSkip()"
+          ></app-flashcard>
+        }
+      </div>
+
+      <button class="fc-nav-arrow arrow-right" mat-icon-button color="primary" [disabled]="currentIndex() === totalCards - 1" (click)="nextCard()">
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+
+    <!-- Hints container strictly mapping array corresponding uniquely to the tracked instance currently mounted dynamically natively -->
+    <div class="fc-hints-container" *ngIf="activeCard">
+      <div class="fc-hints-header">
+        <h3>Hints</h3>
+        <button mat-flat-button color="primary" (click)="toggleHints()">
+          <mat-icon>{{ allHintsVisible() ? 'lightbulb_outline' : 'lightbulb' }}</mat-icon>
+          {{ allHintsVisible() ? 'Hide hints' : 'Show hints' }}
+        </button>
+      </div>
+      <ul class="fc-hints-list">
+        @for (hint of activeCard.hints; track hint; let idx = $index) {
+          <li [ngClass]="{'show': isHintVisible(idx)}" (click)="hideSpecificHint(idx)">{{ hint }}</li>
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div class="fc-info-bar">
+    <div class="fc-score-item">
+      <span class="fc-label">Correct:</span> {{ correctCount() }} ({{ correctPercentage() | number:'1.0-0' }}%)
+    </div>
+    <div class="fc-score-item">
+      <span class="fc-label">Incorrect:</span> {{ incorrectCount() }} ({{ incorrectPercentage() | number:'1.0-0' }}%)
+    </div>
+    <div class="fc-score-item">
+      <span class="fc-label">Skipped:</span> {{ skippedCount() }} ({{ skippedPercentage() | number:'1.0-0' }}%)
+    </div>
+  </div>
+</div>

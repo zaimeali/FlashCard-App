@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -20,26 +21,28 @@ import { MatMenuModule } from '@angular/material/menu';
   styleUrl: './home.scss',
 })
 export class Home {
+  private router = inject(Router);
+
   groups = [
-    { name: 'Biology', description: 'Cell structure, genetics, and more.', cardCount: 24 },
-    { name: 'History', description: 'World history flashcards.', cardCount: 15 },
-    { name: 'Math', description: 'Algebra, geometry, calculus.', cardCount: 42 },
-    { name: 'Biology2', description: 'Cell structure, genetics, and more.', cardCount: 24 },
-    { name: 'History2', description: 'World history flashcards.', cardCount: 15 },
-    { name: 'Math2', description: 'Algebra, geometry, calculus.', cardCount: 42 },
-    { name: 'Biology3', description: 'Cell structure, genetics, and more.', cardCount: 24 },
-    { name: 'History3', description: 'World history flashcards.', cardCount: 15 },
-    { name: 'Math3', description: 'Algebra, geometry, calculus.', cardCount: 42 },
-    { name: 'Biology4', description: 'Cell structure, genetics, and more.', cardCount: 24 },
-    { name: 'History4', description: 'World history flashcards.', cardCount: 15 },
-    { name: 'Math4', description: 'Algebra, geometry, calculus.', cardCount: 42 },
-    { name: 'Biology5', description: 'Cell structure, genetics, and more.', cardCount: 24 },
-    { name: 'History5', description: 'World history flashcards.', cardCount: 15 },
-    { name: 'Math5', description: 'Algebra, geometry, calculus.', cardCount: 42 },
-    { name: 'Math6', description: 'Algebra, geometry, calculus.', cardCount: 42 },
-    { name: 'Biology6', description: 'Cell structure, genetics, and more.', cardCount: 24 },
-    { name: 'History6', description: 'World history flashcards.', cardCount: 15 },
-    { name: 'Math7', description: 'Algebra, geometry, calculus.', cardCount: 42 }
+    { id: '1', name: 'Biology', description: 'Cell structure, genetics, and more.', cardCount: 24 },
+    { id: '2', name: 'History', description: 'World history flashcards.', cardCount: 15 },
+    { id: '3', name: 'Math', description: 'Algebra, geometry, calculus.', cardCount: 42 },
+    { id: '4', name: 'Biology2', description: 'Cell structure, genetics, and more.', cardCount: 24 },
+    { id: '5', name: 'History2', description: 'World history flashcards.', cardCount: 15 },
+    { id: '6', name: 'Math2', description: 'Algebra, geometry, calculus.', cardCount: 42 },
+    { id: '7', name: 'Biology3', description: 'Cell structure, genetics, and more.', cardCount: 24 },
+    { id: '8', name: 'History3', description: 'World history flashcards.', cardCount: 15 },
+    { id: '9', name: 'Math3', description: 'Algebra, geometry, calculus.', cardCount: 42 },
+    { id: '10', name: 'Biology4', description: 'Cell structure, genetics, and more.', cardCount: 24 },
+    { id: '11', name: 'History4', description: 'World history flashcards.', cardCount: 15 },
+    { id: '12', name: 'Math4', description: 'Algebra, geometry, calculus.', cardCount: 42 },
+    { id: '13', name: 'Biology5', description: 'Cell structure, genetics, and more.', cardCount: 24 },
+    { id: '14', name: 'History5', description: 'World history flashcards.', cardCount: 15 },
+    { id: '15', name: 'Math5', description: 'Algebra, geometry, calculus.', cardCount: 42 },
+    { id: '16', name: 'Math6', description: 'Algebra, geometry, calculus.', cardCount: 42 },
+    { id: '17', name: 'Biology6', description: 'Cell structure, genetics, and more.', cardCount: 24 },
+    { id: '18', name: 'History6', description: 'World history flashcards.', cardCount: 15 },
+    { id: '19', name: 'Math7', description: 'Algebra, geometry, calculus.', cardCount: 42 }
   ];
 
   readonly INITIAL_GROUPS = 12;
@@ -64,7 +67,6 @@ export class Home {
   }
 
   openGroup(group: any) {
-    // Navigate to flashcard page, e.g. using Angular Router
-    // this.router.navigate(['/flashcards', group.name]);
+    this.router.navigate(['/flashcards', group.id]);
   }
 }

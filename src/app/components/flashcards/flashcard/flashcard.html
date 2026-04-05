@@ -1,1 +1,40 @@
-<p>flashcard works!</p>
+<div class="fc-card-frame" [ngClass]="{'flipped': isFlipped}" (click)="flipCard()">
+  <!-- FRONT -->
+  <div class="fc-card-face fc-front">
+    <span class="fc-flip-hint">{{ isTouchDevice ? 'Tap' : 'Click' }} to view answer</span>
+    <div class="fc-content">
+      <h2>{{ cardData?.question }}</h2>
+    </div>
+    <!-- Actions mounted on BOTH SIDES natively based on constraints -->
+    <div class="fc-actions">
+      <button mat-icon-button (click)="onAction('incorrect', $event)" class="action-btn incorrect" aria-label="Incorrect">
+        <mat-icon>thumb_down</mat-icon>
+      </button>
+      <button mat-icon-button (click)="onAction('skip', $event)" class="action-btn skip" aria-label="Skip">
+        <mat-icon>replay</mat-icon>
+      </button>
+      <button mat-icon-button (click)="onAction('correct', $event)" class="action-btn correct" aria-label="Correct">
+        <mat-icon>thumb_up</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- BACK -->
+  <div class="fc-card-face fc-back">
+    <div class="fc-content">
+      <p class="fc-answer">{{ cardData?.answer }}</p>
+    </div>
+    <!-- Actions mounted on BOTH SIDES natively based on constraints -->
+    <div class="fc-actions">
+      <button mat-icon-button (click)="onAction('incorrect', $event)" class="action-btn incorrect" aria-label="Incorrect">
+        <mat-icon>thumb_down</mat-icon>
+      </button>
+      <button mat-icon-button (click)="onAction('skip', $event)" class="action-btn skip" aria-label="Skip">
+        <mat-icon>replay</mat-icon>
+      </button>
+      <button mat-icon-button (click)="onAction('correct', $event)" class="action-btn correct" aria-label="Correct">
+        <mat-icon>thumb_up</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
