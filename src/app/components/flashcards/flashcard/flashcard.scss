@@ -15,6 +15,13 @@
   &.flipped {
     transform: rotateY(180deg);
   }
+
+  // Skipped state styling
+  &.skipped .fc-card-face {
+    border-style: dashed;
+    border-color: var(--fc-muted);
+    opacity: 0.8;
+  }
 }
 
 .fc-card-face {
@@ -33,6 +40,30 @@
   flex-direction: column;
   padding: 2rem;
   box-sizing: border-box;
+
+  .fc-status-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.6rem;
+    background: rgba(156, 163, 175, 0.1);
+    color: var(--fc-muted);
+    border-radius: 6px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    pointer-events: none;
+
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+    }
+  }
 
   .fc-flip-hint {
     position: absolute;
@@ -65,13 +96,13 @@
     user-select: none;
 
     h2 {
-      font-size: 2rem;
+      font-size: 2.2rem;
       color: var(--fc-primary);
       margin: 0;
     }
 
     .fc-answer {
-      font-size: 1.35rem;
+      font-size: 1.5rem;
       color: var(--fc-text);
       line-height: 1.5;
       margin: 0;

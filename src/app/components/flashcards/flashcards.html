@@ -16,6 +16,7 @@
           <app-flashcard
             [cardData]="card"
             [active]="i === currentIndex()"
+            [status]="getCardStatus(card.id)"
             class="carousel-card"
             [ngClass]="{
               'active': i === currentIndex(),
@@ -31,7 +32,7 @@
         }
       </div>
 
-      <button class="fc-nav-arrow arrow-right" mat-icon-button color="primary" [disabled]="currentIndex() === totalCards - 1" (click)="nextCard()">
+      <button class="fc-nav-arrow arrow-right" mat-icon-button color="primary" [disabled]="currentIndex() === totalCards - 1" (click)="nextCard(false)">
         <mat-icon>arrow_forward</mat-icon>
       </button>
     </div>
@@ -53,15 +54,30 @@
     </div>
   </div>
 
+  <!-- Redesigned Info Bar with stats chips -->
   <div class="fc-info-bar">
-    <div class="fc-score-item">
-      <span class="fc-label">Correct:</span> {{ correctCount() }} ({{ correctPercentage() | number:'1.0-0' }}%)
+    <div class="fc-stat-chip correct">
+      <mat-icon>check_circle</mat-icon>
+      <div class="fc-stat-content">
+        <span class="fc-value">{{ correctCount() }}</span>
+        <span class="fc-label">Correct ({{ correctPercentage() | number:'1.0-0' }}%)</span>
+      </div>
     </div>
-    <div class="fc-score-item">
-      <span class="fc-label">Incorrect:</span> {{ incorrectCount() }} ({{ incorrectPercentage() | number:'1.0-0' }}%)
+
+    <div class="fc-stat-chip incorrect">
+      <mat-icon>cancel</mat-icon>
+      <div class="fc-stat-content">
+        <span class="fc-value">{{ incorrectCount() }}</span>
+        <span class="fc-label">Incorrect ({{ incorrectPercentage() | number:'1.0-0' }}%)</span>
+      </div>
     </div>
-    <div class="fc-score-item">
-      <span class="fc-label">Skipped:</span> {{ skippedCount() }} ({{ skippedPercentage() | number:'1.0-0' }}%)
+
+    <div class="fc-stat-chip skipped">
+      <mat-icon>replay</mat-icon>
+      <div class="fc-stat-content">
+        <span class="fc-value">{{ skippedCount() }}</span>
+        <span class="fc-label">Skipped ({{ skippedPercentage() | number:'1.0-0' }}%)</span>
+      </div>
     </div>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,16 +6,38 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
   imports: [
+    CommonModule,
+    FormsModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
     MatButtonModule,
     MatMenuModule
+  ],
+  animations: [
+    trigger('cardAnimation', [
+      transition(':leave', [
+        animate('500ms cubic-bezier(0.2, 0, 0, 1)', style({ 
+          opacity: 0, 
+          transform: 'scale(0.5)',
+          width: '0px',
+          'min-width': '0px',
+          'min-height': '0px',
+          margin: '0px',
+          padding: '0px',
+          overflow: 'hidden'
+        }))
+      ])
+    ])
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
@@ -45,9 +67,15 @@ export class Home {
     { id: '19', name: 'Math7', description: 'Algebra, geometry, calculus.', cardCount: 42 }
   ];
 
+  // Pagination
   readonly INITIAL_GROUPS = 12;
   readonly LOAD_MORE_GROUPS = 6;
   visibleGroupsCount = this.INITIAL_GROUPS;
+
+  // Inline Editing
+  editingGroupId = signal<string | null>(null);
+  editName = signal<string>('');
+  editDescription = signal<string>('');
 
   get totalCards() {
     return this.groups.reduce((acc, currentGroup) => acc + currentGroup.cardCount, 0);
@@ -58,7 +86,6 @@ export class Home {
   }
 
   get canLoadMore() {
-    // Show Load More only if there are more groups to show
     return this.groups.length > this.visibleGroupsCount;
   }
 
@@ -66,7 +93,32 @@ export class Home {
     this.visibleGroupsCount += this.LOAD_MORE_GROUPS;
   }
 
+  deleteGroup(id: string) {
+    this.groups = this.groups.filter(group => group.id !== id);
+  }
+
+  startEdit(group: any) {
+    this.editingGroupId.set(group.id);
+    this.editName.set(group.name);
+    this.editDescription.set(group.description);
+  }
+
+  cancelEdit() {
+    this.editingGroupId.set(null);
+  }
+
+  saveEdit() {
+    const id = this.editingGroupId();
+    if (id) {
+      this.groups = this.groups.map(g => 
+        g.id === id ? { ...g, name: this.editName(), description: this.editDescription() } : g
+      );
+    }
+    this.editingGroupId.set(null);
+  }
+
   openGroup(group: any) {
+    if (this.editingGroupId() === group.id) return; // Don't navigate while editing
     this.router.navigate(['/flashcards', group.id]);
   }
 }

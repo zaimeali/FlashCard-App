@@ -2,14 +2,15 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  padding-top: 64px; 
+  margin: 0;
+  padding: 64px 0 0 0; 
   background-color: var(--fc-bg);
   overflow: hidden;
 }
 
 .fc-title-bar {
   text-align: center;
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
   flex-shrink: 0;
 
   h2 {
@@ -30,7 +31,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 1.5rem;
   position: relative;
   overflow: hidden; 
 }
@@ -38,7 +39,8 @@
 .fc-carousel-wrapper {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: center;
+  gap: 2rem;
   width: 100%;
   max-width: 1000px;
 }
@@ -73,7 +75,6 @@
               opacity 0.4s ease,
               transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
   
-  // Active card: centered, full opacity
   &.active {
     left: 7.5%;
     transform: translateY(-50%) scale(1);
@@ -82,7 +83,6 @@
     pointer-events: auto;
   }
   
-  // Prev card: majority hidden to the left, ~5% peeking out
   &.prev {
     left: -80%;
     transform: translateY(-50%) scale(0.98);
@@ -91,7 +91,6 @@
     pointer-events: none;
   }
 
-  // Next card: majority hidden to the right, ~5% peeking out
   &.next {
     left: 95%;
     transform: translateY(-50%) scale(0.98);
@@ -100,7 +99,6 @@
     pointer-events: none;
   }
 
-  // Non-adjacent cards: completely off-screen
   &.hidden-left {
     left: -95%;
     transform: translateY(-50%) scale(0.95);
@@ -119,24 +117,24 @@
 }
 
 .fc-hints-container {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   width: 100%;
   max-width: 600px;
   border: 1px solid var(--fc-border);
   background: var(--fc-surface);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1.25rem;
 
   .fc-hints-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 
     h3 {
       margin: 0;
       color: var(--fc-text);
-      font-size: 1.25rem;
+      font-size: 1.15rem;
     }
   }
 
@@ -169,18 +167,50 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
-  padding: 1.5rem;
+  gap: 3rem;
+  padding: 1.25rem 2rem;
   background: var(--fc-surface);
   border-top: 1px solid var(--fc-border);
   flex-shrink: 0;
   
-  .fc-score-item {
-    font-size: 1rem;
-    font-weight: 500;
-    .fc-label {
-      color: var(--fc-muted);
-      margin-right: 0.25rem;
+  .fc-stat-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    mat-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+
+    .fc-stat-content {
+      display: flex;
+      flex-direction: column;
+      
+      .fc-value {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--fc-text);
+        line-height: 1;
+      }
+
+      .fc-label {
+        font-size: 0.75rem;
+        color: var(--fc-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+    }
+
+    &.correct {
+      mat-icon { color: var(--fc-primary); }
+    }
+    &.incorrect {
+      mat-icon { color: var(--fc-danger); }
+    }
+    &.skipped {
+      mat-icon { color: var(--fc-muted); }
     }
   }
 }

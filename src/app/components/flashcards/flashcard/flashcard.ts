@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class Flashcard {
   @Input() cardData: any;
+  @Input() status: 'correct' | 'incorrect' | 'skipped' | 'none' = 'none';
   
   @Output() correct = new EventEmitter<void>();
   @Output() incorrect = new EventEmitter<void>();

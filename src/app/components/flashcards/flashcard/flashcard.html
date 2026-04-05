@@ -1,12 +1,15 @@
-<div class="fc-card-frame" [ngClass]="{'flipped': isFlipped}" (click)="flipCard()">
+<div class="fc-card-frame" [ngClass]="{'flipped': isFlipped, 'skipped': status === 'skipped'}" (click)="active ? flipCard() : null">
   <!-- FRONT -->
   <div class="fc-card-face fc-front">
-    <span class="fc-flip-hint">{{ isTouchDevice ? 'Tap' : 'Click' }} to view answer</span>
+    <div class="fc-status-badge" *ngIf="status === 'skipped'">
+      <mat-icon>replay</mat-icon> SKIPPED
+    </div>
+    <span class="fc-flip-hint" *ngIf="!isFlipped">{{ isTouchDevice ? 'Tap' : 'Click' }} to view answer</span>
     <div class="fc-content">
       <h2>{{ cardData?.question }}</h2>
     </div>
     <!-- Actions mounted on BOTH SIDES natively based on constraints -->
-    <div class="fc-actions">
+    <div class="fc-actions" *ngIf="active">
       <button mat-icon-button (click)="onAction('incorrect', $event)" class="action-btn incorrect" aria-label="Incorrect">
         <mat-icon>thumb_down</mat-icon>
       </button>
@@ -21,11 +24,14 @@
 
   <!-- BACK -->
   <div class="fc-card-face fc-back">
+    <div class="fc-status-badge" *ngIf="status === 'skipped'">
+      <mat-icon>replay</mat-icon> SKIPPED
+    </div>
     <div class="fc-content">
       <p class="fc-answer">{{ cardData?.answer }}</p>
     </div>
     <!-- Actions mounted on BOTH SIDES natively based on constraints -->
-    <div class="fc-actions">
+    <div class="fc-actions" *ngIf="active">
       <button mat-icon-button (click)="onAction('incorrect', $event)" class="action-btn incorrect" aria-label="Incorrect">
         <mat-icon>thumb_down</mat-icon>
       </button>
