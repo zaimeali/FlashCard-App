@@ -2,10 +2,9 @@
 name: create-group-design-skills
 description: Implementation design guide for the create group screen of the Flash Card App.
 applies_to: 
-  - src/app/components/flashcards/create-group/create-group.html
-  - src/app/components/flashcards/create-group/create-group.scss
-  - src/app/components/flashcards/create-group/create-group.ts
-  - src/app/components/flashcards/create-group/create-group.spec.ts
+  - src/app/components/flashcards/group-detail/group-detail.html
+  - src/app/components/flashcards/group-detail/group-detail.scss
+  - src/app/components/flashcards/group-detail/group-detail.ts
 design:
   - for theme's color, and fonts refer to `src/styles.scss`
 ---

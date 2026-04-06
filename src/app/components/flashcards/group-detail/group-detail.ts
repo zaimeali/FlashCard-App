@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,7 +10,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AddFlashcardDialog, AddFlashcardData } from './add-flashcard-dialog/add-flashcard-dialog';
 import { HintsDialog } from './hints-dialog/hints-dialog';
 
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 
 export interface FlashcardItem {
   question: string;
@@ -19,7 +19,7 @@ export interface FlashcardItem {
 }
 
 @Component({
-  selector: 'app-create-group',
+  selector: 'app-group-detail',
   standalone: true,
   imports: [
     CommonModule,
@@ -32,21 +32,49 @@ export interface FlashcardItem {
     MatDialogModule,
     RouterModule,
   ],
-  templateUrl: './create-group.html',
-  styleUrl: './create-group.scss',
+  templateUrl: './group-detail.html',
+  styleUrl: './group-detail.scss',
 })
-export class CreateGroup {
+export class GroupDetail implements OnInit {
   groupForm: FormGroup;
   flashcards = signal<FlashcardItem[]>([]);
   displayedColumns: string[] = ['question', 'answer', 'hints', 'actions'];
+  isEditMode = signal(false);
 
   isAddGroupDisabled = computed(() => this.flashcards().length === 0 || this.groupForm.invalid);
 
-  constructor(private dialog: MatDialog) {
+  constructor(private dialog: MatDialog, private route: ActivatedRoute) {
     this.groupForm = new FormGroup({
       groupName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
       groupDescription: new FormControl('', [Validators.required, Validators.maxLength(200)]),
     });
+  }
+
+  ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.isEditMode.set(true);
+      this.loadGroupData(id);
+    }
+  }
+
+  private loadGroupData(id: string) {
+    // Mocking an API response
+    // In a real app, this would come from a FlashcardService
+    const mockData = {
+      name: 'Biology Basics',
+      description: 'Foundational concepts in biology including cell structures and basic processes.',
+      cards: [
+        { question: 'Mitochondria', answer: 'The powerhouse of the cell.', hints: ['Energy production'] },
+        { question: 'Photosynthesis', answer: 'Process by which plants use sunlight to create energy.', hints: ['Sunlight to sugar'] }
+      ]
+    };
+
+    this.groupForm.patchValue({
+      groupName: mockData.name,
+      groupDescription: mockData.description
+    });
+    this.flashcards.set(mockData.cards);
   }
 
   openAddFlashcardDialog() {

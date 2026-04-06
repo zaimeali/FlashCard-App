@@ -4,7 +4,12 @@
       <mat-icon>arrow_back</mat-icon>
     </button>
     <div class="fc-title-content">
-      <h2>Biology Flashcards</h2>
+      <div class="fc-title-row">
+        <h2>Biology Flashcards</h2>
+        <a mat-icon-button [routerLink]="['/flashcards/edit', '1']" class="fc-edit-group-btn" title="Edit Group">
+          <mat-icon>edit</mat-icon>
+        </a>
+      </div>
       <p>Total Flashcards: {{ totalCards }}</p>
     </div>
   </div>
