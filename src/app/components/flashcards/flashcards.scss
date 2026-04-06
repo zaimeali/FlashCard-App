@@ -9,20 +9,49 @@
 }
 
 .fc-title-bar {
-  text-align: center;
-  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.5rem; /* Further reduced padding */
   flex-shrink: 0;
+  position: relative;
+  min-height: 60px; /* Further reduced min-height */
 
-  h2 {
-    font-size: 1.8rem;
-    color: var(--fc-primary);
-    margin: 0 0 0.25rem 0;
-  }
-  p {
-    margin: 0;
+  .fc-back-btn {
+    position: absolute;
+    left: 0.75rem; /* Reduced from 1.5rem */
     color: var(--fc-muted);
-    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    z-index: 10;
+
+    &:hover {
+      color: var(--fc-primary);
+      transform: scale(1.1);
+    }
   }
+
+  .fc-title-content {
+    text-align: center;
+    flex: 1;
+
+    h2 {
+      font-size: 1.5rem; /* Further reduced slightly */
+      color: var(--fc-primary);
+      margin: 0; /* Removed bottom margin */
+    }
+    p {
+      margin: 0;
+      color: var(--fc-muted);
+      font-size: 0.8rem; /* Further reduced slightly */
+    }
+  }
+}
+
+.fc-header-divider {
+  height: 1px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.05), var(--fc-border), rgba(255, 255, 255, 0.05));
+  margin: 0 1rem;
+  opacity: 0.8;
 }
 
 .fc-main-content {
@@ -31,7 +60,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 0 1.5rem 0.5rem 1.5rem; /* Removed top padding */
   position: relative;
   overflow: hidden; 
 }
@@ -117,13 +146,13 @@
 }
 
 .fc-hints-container {
-  margin-top: 1.5rem;
+  margin-top: 0.75rem; /* Reduced margin-top */
   width: 100%;
   max-width: 600px;
   border: 1px solid var(--fc-border);
   background: var(--fc-surface);
   border-radius: 12px;
-  padding: 1.25rem;
+  padding: 1rem; /* Reduced padding */
 
   .fc-hints-header {
     display: flex;
