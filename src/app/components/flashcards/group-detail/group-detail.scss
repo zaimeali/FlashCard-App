@@ -1,4 +1,4 @@
-.create-group-container {
+.group-detail-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -196,7 +196,7 @@
 }
 
 @media (max-width: 900px) {
-  .create-group-container {
+  .group-detail-container {
     overflow-y: auto;
     height: auto;
     padding: calc(1rem + 64px) 1rem 2rem 1rem;

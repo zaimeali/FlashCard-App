@@ -4,9 +4,13 @@ import { Home } from './components/home/home';
 import { Dashboard } from './components/dashboard/dashboard';
 import { Profile } from './components/auth/profile/profile';
 import { Flashcards } from './components/flashcards/flashcards';
-import { CreateGroup } from './components/flashcards/create-group/create-group';
+import { GroupDetail } from './components/flashcards/group-detail/group-detail';
 
 export const routes: Routes = [
+    {
+        path: 'login',
+        component: Login
+    },
     {
         path: 'login',
         component: Login
@@ -25,7 +29,11 @@ export const routes: Routes = [
     },
     {
         path: 'flashcards/create/group',
-        component: CreateGroup
+        component: GroupDetail
+    },
+    {
+        path: 'flashcards/edit/:id',
+        component: GroupDetail
     },
     {
         path: 'flashcards/:id',

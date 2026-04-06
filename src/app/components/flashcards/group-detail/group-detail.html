@@ -1,10 +1,10 @@
-<div class="create-group-container">
+<div class="group-detail-container">
   <div class="main-card">
     <div class="header">
       <button mat-icon-button [routerLink]="['/']" class="back-btn" title="Back to Home">
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <h1>Create New Group</h1>
+      <h1>{{ isEditMode() ? 'Edit Group' : 'Create New Group' }}</h1>
     </div>
     <div class="heading-divider"></div>
 
@@ -85,8 +85,8 @@
     <div class="footer-actions">
       <button mat-raised-button color="primary" [disabled]="isAddGroupDisabled()" (click)="saveGroup()"
         class="add-group-btn">
-        <mat-icon>check_circle</mat-icon>
-        Create Group
+        <mat-icon>{{ isEditMode() ? 'save' : 'check_circle' }}</mat-icon>
+        {{ isEditMode() ? 'Update Group' : 'Create Group' }}
       </button>
     </div>
   </div>
