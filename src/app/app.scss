@@ -4,3 +4,9 @@
     height: 100vh;
     overflow: hidden;
 }
+
+@media (max-width: 768px) {
+    :host {
+        height: 100svh;
+    }
+}

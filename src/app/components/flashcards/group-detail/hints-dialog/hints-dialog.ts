@@ -19,14 +19,18 @@ import { MatListModule } from '@angular/material/list';
     <h2 mat-dialog-title>Hints</h2>
     <mat-dialog-content>
       <mat-list>
-        <mat-list-item *ngFor="let hint of hints; let i = index">
-          <mat-icon matListItemIcon>info_outline</mat-icon>
-          <div matListItemTitle>Hint {{ i + 1 }}</div>
-          <div matListItemLine>{{ hint }}</div>
-        </mat-list-item>
-        <div *ngIf="hints.length === 0" class="no-hints-msg">
-          No hints available for this flashcard.
-        </div>
+        @for (hint of hints; track i; let i = $index) {
+          <mat-list-item>
+            <mat-icon matListItemIcon>info_outline</mat-icon>
+            <div matListItemTitle>Hint {{ i + 1 }}</div>
+            <div matListItemLine>{{ hint }}</div>
+          </mat-list-item>
+        }
+        @if (hints.length === 0) {
+          <div class="no-hints-msg">
+            No hints available for this flashcard.
+          </div>
+        }
       </mat-list>
     </mat-dialog-content>
     <mat-dialog-actions align="center">
@@ -43,6 +47,25 @@ import { MatListModule } from '@angular/material/list';
 
     mat-list-item {
       margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .no-hints-msg {
+        padding: 0.75rem;
+        font-size: 0.85rem;
+      }
+      
+      mat-list-item {
+        margin-bottom: 0.25rem;
+        
+        [matListItemTitle] {
+          font-size: 0.8rem;
+        }
+        
+        [matListItemLine] {
+          font-size: 0.9rem;
+        }
+      }
     }
   `]
 })

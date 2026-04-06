@@ -40,6 +40,7 @@ export class GroupDetail implements OnInit {
   flashcards = signal<FlashcardItem[]>([]);
   displayedColumns: string[] = ['question', 'answer', 'hints', 'actions'];
   isEditMode = signal(false);
+  expandedIndex = signal<number | null>(null);
 
   isAddGroupDisabled = computed(() => this.flashcards().length === 0 || this.groupForm.invalid);
 
@@ -130,5 +131,9 @@ export class GroupDetail implements OnInit {
       console.log('Saving Group:', payload);
       // Implementation for saving (API call) goes here
     }
+  }
+
+  toggleExpand(index: number) {
+    this.expandedIndex.set(this.expandedIndex() === index ? null : index);
   }
 }

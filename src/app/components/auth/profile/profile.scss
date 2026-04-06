@@ -1,11 +1,17 @@
 .fc-main {
-  margin-top: 64px; // height of toolbar
+  margin-top: 72px; // Adjusted for new desktop navbar height
   padding: 2rem 1rem;
-  height: calc(100vh - 64px);
+  height: calc(100vh - 72px);
   background: var(--fc-bg);
   overflow: hidden; 
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 768px) {
+    margin-top: 64px;
+    height: calc(100svh - 64px);
+    padding: 1.5rem 1rem;
+  }
 }
 
 .fc-profile-section {
@@ -25,10 +31,20 @@
       align-items: center;
       gap: 0.5rem;
 
+      @media (max-width: 768px) {
+        font-size: 1.8rem;
+      }
+
       mat-icon {
         font-size: 2.2rem;
         height: 2.2rem;
         width: 2.2rem;
+
+        @media (max-width: 768px) {
+          font-size: 1.8rem;
+          height: 1.8rem;
+          width: 1.8rem;
+        }
       }
     }
   }
@@ -42,10 +58,20 @@
     flex-direction: column;
     gap: 1.5rem;
 
+    @media (max-width: 768px) {
+      padding: 1.5rem;
+      gap: 1rem;
+    }
+
     .fc-form-row {
       display: flex;
       gap: 1.5rem;
       width: 100%;
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 1rem;
+      }
 
       .fc-profile-field {
         flex: 1; 
@@ -61,12 +87,23 @@
       display: flex;
       justify-content: flex-end;
 
+      @media (max-width: 768px) {
+        justify-content: center;
+        margin-top: 0.5rem;
+      }
+
       .fc-update-btn {
         transition: all 0.2s ease-in-out;
         
         &:hover, &:focus {
           transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+
+        @media (max-width: 768px) {
+          width: 100%;
+          max-width: 250px;
+          height: 48px;
         }
       }
     }

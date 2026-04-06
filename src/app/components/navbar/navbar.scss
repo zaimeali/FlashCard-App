@@ -3,31 +3,50 @@
     top: 0;
     left: 0;
     width: 100vw;
-    height: 64px;
+    height: 72px;
     z-index: 100;
     border-bottom: 1px solid var(--fc-border);
     display: flex;
     justify-content: space-between;
     padding: 0 1.5rem;
+    background: rgba(28, 28, 30, 0.8) !important;
+    backdrop-filter: blur(12px);
 
     .fc-navbar-left {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: 0.85rem;
         cursor: pointer;
         flex: 1;
 
         .fc-logo-icon {
-            height: 28px;
-            width: 28px;
+            height: 32px;
+            width: 32px;
+            filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.3));
         }
 
-        .fc-logo-text {
-            font-family: var(--fc-font-heading);
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--fc-primary);
-            letter-spacing: -0.03em;
+        .fc-brand-text-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            line-height: 1.2;
+
+            .fc-logo-text {
+                font-family: var(--fc-font-heading);
+                font-size: 1.4rem;
+                font-weight: 800;
+                color: var(--fc-primary);
+                letter-spacing: -0.03em;
+            }
+
+            .mobile-only-motto {
+                display: none;
+                font-size: 0.7rem;
+                color: var(--fc-muted);
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                margin-top: -2px;
+            }
         }
     }
 
@@ -35,8 +54,13 @@
         flex: 1;
         display: flex;
         justify-content: center;
-        align-items: flex-end;
-        padding-bottom: 0.25rem;
+        align-items: center;
+
+        &.desktop-only {
+            @media (max-width: 768px) {
+                display: none;
+            }
+        }
 
         .fc-motto {
             font-family: var(--fc-font-heading);
@@ -51,19 +75,92 @@
         flex: 1;
         display: flex;
         justify-content: flex-end;
+        align-items: center;
         gap: 0.5rem;
 
-        .primary-colored {
-            color: var(--fc-primary);
-            &.active-link {
-                background: rgba(34, 197, 94, 0.1);
+        .fc-desktop-actions {
+            display: flex;
+            gap: 0.5rem;
+
+            @media (max-width: 768px) {
+                display: none;
+            }
+
+            .primary-colored {
+                color: var(--fc-primary);
+                &.active-link {
+                    background: rgba(34, 197, 94, 0.1);
+                }
+            }
+
+            .fc-warn-btn {
+                color: var(--fc-danger);
+                &:hover {
+                    background: rgba(248, 113, 113, 0.1);
+                }
             }
         }
 
-        .fc-warn-btn {
-            color: var(--fc-danger);
-            &:hover {
-                background: rgba(248, 113, 113, 0.1);
+        .fc-mobile-actions {
+            display: none;
+
+            @media (max-width: 768px) {
+                display: flex;
+            }
+
+            .fc-menu-trigger {
+                color: var(--fc-primary);
+                background: rgba(34, 197, 94, 0.05);
+                border: 0.5px solid rgba(34, 197, 94, 0.2);
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        height: 64px;
+        padding: 0 1rem;
+
+        .fc-navbar-left {
+            .fc-logo-icon {
+                height: 28px;
+                width: 28px;
+            }
+            .fc-brand-text-container {
+                .fc-logo-text {
+                    font-size: 1.2rem;
+                }
+                .mobile-only-motto {
+                    display: block;
+                }
+            }
+        }
+    }
+}
+
+::ng-deep .fc-custom-menu {
+    background-color: var(--fc-surface) !important;
+    border: 0.5px solid var(--fc-border);
+    border-radius: 12px !important;
+    margin-top: 8px;
+
+    .mat-mdc-menu-item {
+        color: var(--fc-text) !important;
+        font-family: var(--fc-font-body);
+        
+        mat-icon {
+            color: var(--fc-primary);
+            margin-right: 12px;
+        }
+
+        &.active-link {
+            background: rgba(34, 197, 94, 0.1) !important;
+            color: var(--fc-primary) !important;
+        }
+
+        &.fc-warn-menu-item {
+            color: var(--fc-danger) !important;
+            mat-icon {
+                color: var(--fc-danger);
             }
         }
     }
