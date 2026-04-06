@@ -4,14 +4,12 @@
       <mat-icon>arrow_back</mat-icon>
     </button>
     <div class="fc-title-content">
-      <div class="fc-title-row">
-        <h2>Biology Flashcards</h2>
-        <a mat-icon-button [routerLink]="['/flashcards/edit', '1']" class="fc-edit-group-btn" title="Edit Group">
-          <mat-icon>edit</mat-icon>
-        </a>
-      </div>
+      <h2>Biology Flashcards</h2>
       <p>Total Flashcards: {{ totalCards }}</p>
     </div>
+    <a mat-icon-button [routerLink]="['/flashcards/edit', '1']" class="fc-edit-group-btn" title="Edit Group">
+      <mat-icon>edit</mat-icon>
+    </a>
   </div>
   <div class="fc-header-divider"></div>
 
@@ -48,20 +46,21 @@
       </button>
     </div>
 
-    <!-- Hints container strictly mapping array corresponding uniquely to the tracked instance currently mounted dynamically natively -->
-    <div class="fc-hints-container" *ngIf="activeCard">
-      <div class="fc-hints-header">
-        <h3>Hints</h3>
-        <button mat-flat-button color="primary" (click)="toggleHints()">
-          <mat-icon>{{ allHintsVisible() ? 'lightbulb_outline' : 'lightbulb' }}</mat-icon>
-          {{ allHintsVisible() ? 'Hide hints' : 'Show hints' }}
-        </button>
-      </div>
-      <ul class="fc-hints-list">
-        @for (hint of activeCard.hints; track hint; let idx = $index) {
-          <li [ngClass]="{'show': isHintVisible(idx)}" (click)="hideSpecificHint(idx)">{{ hint }}</li>
-        }
-      </ul>
+    <div class="fc-hints-container">
+      @if (activeCard) {
+        <div class="fc-hints-header">
+          <h3>Hints</h3>
+          <button mat-flat-button color="primary" (click)="toggleHints()">
+            <mat-icon>{{ allHintsVisible() ? 'lightbulb_outline' : 'lightbulb' }}</mat-icon>
+            {{ allHintsVisible() ? 'Hide hints' : 'Show hints' }}
+          </button>
+        </div>
+        <ul class="fc-hints-list">
+          @for (hint of activeCard.hints; track hint; let idx = $index) {
+            <li [ngClass]="{'show': isHintVisible(idx)}" (click)="hideSpecificHint(idx)">{{ hint }}</li>
+          }
+        </ul>
+      }
     </div>
   </div>
 

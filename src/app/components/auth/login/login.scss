@@ -227,6 +227,7 @@
 @media (max-width: 768px) {
   .login-page {
     grid-template-columns: 1fr;
+    min-height: 100svh;
   }
 
   .login-left {
