@@ -1,0 +1,223 @@
+.create-group-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 64px;
+  height: calc(100vh - 64px);
+  padding: 1rem 2rem; /* Reduced vertical padding */
+  background-color: var(--fc-bg);
+  overflow: hidden;
+}
+
+.main-card {
+  width: 100%;
+  max-width: 1100px;
+  background-color: var(--fc-surface);
+  padding: 1.5rem; /* Reduced padding */
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* Reduced gap */
+  max-height: calc(100vh - 100px);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  h1 {
+    font-size: 1.5rem;
+    color: var(--fc-primary);
+    margin: 0;
+  }
+
+  .back-btn {
+    color: var(--fc-muted);
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: var(--fc-primary);
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+  }
+}
+
+.heading-divider {
+  height: 1px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.02), var(--fc-border), rgba(255, 255, 255, 0.02));
+  margin: 0 -0.5rem; /* Slight overlap with card padding for full width if needed */
+  opacity: 0.8;
+}
+
+.content-row {
+  display: flex;
+  gap: 1rem; /* Reduced gap since we have a divider */
+  flex: 1;
+  margin-top: 0.75rem;
+  /* Removed overflow: hidden to allow floating labels to pop into header space */
+}
+
+.vertical-divider {
+  width: 1px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.05), var(--fc-border), rgba(255, 255, 255, 0.05));
+  margin: 0 0.5rem;
+  opacity: 0.6;
+}
+
+@media (max-width: 900px) {
+  .vertical-divider {
+    display: none; /* Hide when columns are stacked */
+  }
+}
+
+.group-info-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem; /* Reduced gap */
+  min-width: 300px;
+  padding-top: 0.75rem; /* Additional head room for floating labels */
+}
+
+.flashcards-pane {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem; /* Reduced gap */
+  overflow: hidden; /* Keep this to ensure table scroll works correctly */
+}
+
+.flashcards-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* Reduced gap */
+  height: 100%;
+}
+
+.flashcards-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h2 {
+    font-size: 1.5rem;
+    color: var(--fc-primary);
+    margin: 0;
+  }
+}
+
+.table-container {
+  flex: 1;
+  overflow-y: auto;
+  border: 1px solid var(--fc-border);
+  border-radius: 0.75rem;
+  background-color: var(--fc-card);
+
+  /* Compact table style */
+  .mat-mdc-table {
+    width: 100%;
+    background-color: transparent !important;
+    font-size: 0.9rem;
+  }
+
+  .mat-mdc-header-row {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .mat-mdc-row:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+  }
+
+  .answer-cell {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.group-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  textarea {
+    resize: none;
+  }
+}
+
+.empty-table-msg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 3rem;
+  color: var(--fc-muted);
+
+  mat-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+    opacity: 0.5;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.footer-actions {
+  display: flex;
+  justify-content: center;
+  padding-top: 1rem;
+}
+
+.add-group-btn {
+  padding: 0.75rem 3rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 2rem;
+  transition: all 0.3s ease;
+
+  &[disabled] {
+    background-color: var(--fc-border) !important;
+    color: var(--fc-muted) !important;
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none !important;
+    transform: scale(1) !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .create-group-container {
+    overflow-y: auto;
+    height: auto;
+    padding: calc(1rem + 64px) 1rem 2rem 1rem;
+  }
+
+  .main-card {
+    max-height: none;
+  }
+
+  .content-row {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .flashcards-pane {
+    overflow: visible;
+  }
+
+  .table-container {
+    overflow: visible;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+}

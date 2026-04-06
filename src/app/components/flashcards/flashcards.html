@@ -1,8 +1,14 @@
 <div class="fc-flashcards-page">
   <div class="fc-title-bar">
-    <h2>Biology Flashcards</h2>
-    <p>Total Flashcards: {{ totalCards }}</p>
+    <button mat-icon-button routerLink="/" class="fc-back-btn" title="Back to Home">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="fc-title-content">
+      <h2>Biology Flashcards</h2>
+      <p>Total Flashcards: {{ totalCards }}</p>
+    </div>
   </div>
+  <div class="fc-header-divider"></div>
 
   <div class="fc-main-content">
     

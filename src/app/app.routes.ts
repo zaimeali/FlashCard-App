@@ -4,6 +4,7 @@ import { Home } from './components/home/home';
 import { Dashboard } from './components/dashboard/dashboard';
 import { Profile } from './components/auth/profile/profile';
 import { Flashcards } from './components/flashcards/flashcards';
+import { CreateGroup } from './components/flashcards/create-group/create-group';
 
 export const routes: Routes = [
     {
@@ -21,6 +22,10 @@ export const routes: Routes = [
     {
         path: 'profile',
         component: Profile
+    },
+    {
+        path: 'flashcards/create/group',
+        component: CreateGroup
     },
     {
         path: 'flashcards/:id',

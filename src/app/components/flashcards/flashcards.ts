@@ -6,9 +6,11 @@ import { Flashcard } from './flashcard/flashcard';
 
 export type CardStatus = 'correct' | 'incorrect' | 'skipped' | 'none';
 
+import { RouterLink } from '@angular/router';
+
 @Component({
   selector: 'app-flashcards',
-  imports: [CommonModule, MatIconModule, MatButtonModule, Flashcard],
+  imports: [CommonModule, MatIconModule, MatButtonModule, Flashcard, RouterLink],
   templateUrl: './flashcards.html',
   styleUrl: './flashcards.scss',
 })
