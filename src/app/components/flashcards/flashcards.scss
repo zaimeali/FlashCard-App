@@ -129,7 +129,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+  gap: 4rem;
   width: 100%;
   max-width: 1000px;
 
@@ -142,6 +142,7 @@
 .fc-nav-arrow {
   flex-shrink: 0;
   transition: transform 0.2s ease, background-color 0.2s ease;
+  z-index: 1;
 
   &:hover:not([disabled]) {
     transform: scale(1.2);
@@ -157,10 +158,13 @@
   position: relative;
   flex: 1;
   height: 420px;
-  overflow: clip;
+  overflow: visible;
+  max-width: 650px;
+  margin: 0 auto;
 
   @media (max-width: 768px) {
     height: 360px;
+    max-width: 100%;
   }
 }
 
@@ -172,34 +176,67 @@
   transition: left 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
               opacity 0.4s ease,
               transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: 2;
   
   @media (max-width: 768px) {
-    width: 92%;
+    width: 96%;
     height: 340px;
+    z-index: unset;
   }
 
   &.active {
-    left: 7.5%;
-    transform: translateY(-50%) scale(1);
+    left: 50%;
+    width: 85%;
+    transform: translate(-50%, -50%) scale(1);
     z-index: 10;
     opacity: 1;
     pointer-events: auto;
+    @media (max-width: 768px) {
+      width: 90%;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.10);
+    }
   }
   
   &.prev {
-    left: -80%;
-    transform: translateY(-50%) scale(0.98);
+    left: 25%;
+    width: 60%;
+    transform: translate(-80%, -50%) scale(0.85) rotate(-10deg);
     z-index: 5;
     opacity: 0.7;
     pointer-events: none;
+    filter: blur(0.5px);
+    transition: left 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
+                opacity 0.4s ease,
+                transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    @media (max-width: 768px) {
+      left: -10%;
+      width: 84%;
+      transform: translateY(-50%) scale(0.92) rotate(-6deg);
+      z-index: 5;
+      opacity: 0.6;
+      filter: blur(1px);
+    }
   }
 
   &.next {
-    left: 95%;
-    transform: translateY(-50%) scale(0.98);
+    left: 75%;
+    width: 60%;
+    transform: translate(-20%, -50%) scale(0.85) rotate(10deg);
     z-index: 5;
     opacity: 0.7;
     pointer-events: none;
+    filter: blur(0.5px);
+    transition: left 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
+                opacity 0.4s ease,
+                transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    @media (max-width: 768px) {
+      left: 26%;
+      width: 84%;
+      transform: translateY(-50%) scale(0.92) rotate(6deg);
+      z-index: 5;
+      opacity: 0.6;
+      filter: blur(1px);
+    }
   }
 
   &.hidden-left {
