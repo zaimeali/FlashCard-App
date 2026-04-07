@@ -1,4 +1,10 @@
-<div class="fc-card-frame" [ngClass]="{'flipped': isFlipped, 'skipped': status === 'skipped'}" (click)="active ? flipCard() : null">
+<div class="fc-card-frame"
+  [ngClass]="{'flipped': isFlipped, 'skipped': status === 'skipped' && !isCurrentSkipped}"
+  (click)="active ? flipCard() : null"
+  (touchstart)="active ? onTouchStart($event) : null"
+  (touchmove)="active ? onTouchMove($event) : null"
+  (touchend)="active ? onTouchEnd($event) : null"
+>
   <!-- FRONT -->
   <div class="fc-card-face fc-front">
     @if (status === 'skipped') {

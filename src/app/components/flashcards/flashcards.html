@@ -26,6 +26,7 @@
             [cardData]="card"
             [active]="i === currentIndex()"
             [status]="getCardStatus(card.id)"
+            [isCurrentSkipped]="getCardStatus(card.id) === 'skipped' && i === currentIndex()"
             class="carousel-card"
             [ngClass]="{
               'active': i === currentIndex(),
@@ -37,6 +38,8 @@
             (correct)="handleCorrect()"
             (incorrect)="handleIncorrect()"
             (skip)="handleSkip()"
+            (swipeLeft)="nextCard()"
+            (swipeRight)="prevCard()"
           ></app-flashcard>
         }
       </div>
