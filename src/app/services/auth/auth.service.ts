@@ -69,7 +69,7 @@ export class AuthService {
       const { data, error } = await this.supabaseService.client.auth.signInWithOAuth({
         provider: AuthService.GITHUB_PROVIDER,
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`
+          redirectTo: `${window.location.origin}`
         }
       });
 
