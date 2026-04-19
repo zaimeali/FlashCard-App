@@ -1,7 +1,7 @@
-import { Component, signal, inject } from '@angular/core';
-import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs';
+import { Component, inject } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { Navbar } from './components/navbar/navbar';
+import { AuthService } from './services/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -13,16 +13,9 @@ import { Navbar } from './components/navbar/navbar';
   styleUrl: './app.scss',
 })
 export class App {
-  private router = inject(Router);
-  protected readonly title = signal('cmod');
-  
-  isLoginPage = signal(false);
+  private readonly authService = inject(AuthService);
+  isLoading = this.authService.isLoading;
+  isAuthenticated = this.authService.isAuthenticated;
 
-  constructor() {
-    this.router.events.pipe(
-      filter((event): event is NavigationEnd => event instanceof NavigationEnd)
-    ).subscribe(event => {
-      this.isLoginPage.set(event.urlAfterRedirects === '/login');
-    });
-  }
+  constructor() {}
 }

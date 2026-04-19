@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { AuthService } from '../../../services/auth/auth.service';
+import { Routes } from '../../../utils/auth-guard/constants/routes';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +19,25 @@ import { RouterModule } from '@angular/router';
 })
 export class Login {
 
-  public login(): void {
-    // todo
+  constructor(
+    public authService: AuthService,
+    private router: Router
+  ) {
+    effect(() => {
+      const user = this.authService.user();
+      console.log('[Login] User signal changed:', user);
+      if (user) {
+        console.log('[Login] User authenticated, redirecting to HOME');
+        this.router.navigate([`/${Routes.HOME}`]);
+      } else {
+        console.log('[Login] User is null, staying on login page');
+      }
+    });
+  }
+
+  public async loginWithGithub() {
+    const response = await this.authService.loginWithGithub();
+
+    console.log("Login Response: ", response);
   }
 }
