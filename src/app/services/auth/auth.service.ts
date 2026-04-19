@@ -111,4 +111,27 @@ export class AuthService {
       console.error("Logout Error: ", error);
     }
   }
+
+  public async deleteAccount() {
+    console.log('[AuthService] Delete Account started');
+    try {
+      const { data: { user }, error: userError } = await this.supabaseService.client.auth.getUser();
+
+      if (userError || !user) throw new Error('No authenticated user found');
+
+      const { error: deleteError } = await this.supabaseService.client.rpc('delete_self');
+
+      if (deleteError) throw deleteError;
+
+      this.updateAuthState(null);
+
+      this.router.navigate([`/${Routes.LOGIN}`]);
+
+      return { success: true };
+    } catch (error) {
+      alert("Error Deleting Account");
+      console.error("Delete Account Error: ", error);
+      return { success: false, error: error };
+    }
+  }
 }
