@@ -1,0 +1,302 @@
+// Shared legal page styles — used in both TermsPage and PrivacyPolicyPage
+
+:host {
+  display: block;
+}
+
+.legal-page {
+  height: 100vh;
+  overflow-y: auto;
+  padding: 112px 24px 80px;
+  background-color: var(--fc-bg);
+}
+
+.legal-container {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+// ── Header ──────────────────────────────────────────────
+
+.legal-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--fc-border);
+}
+
+.legal-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(74, 222, 128, 0.08));
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  color: var(--fc-primary);
+  flex-shrink: 0;
+}
+
+.legal-header-text {
+  h1 {
+    font-family: var(--fc-font-heading);
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: var(--fc-text);
+    margin: 0 0 4px;
+  }
+}
+
+.legal-subtitle {
+  font-size: 0.8rem;
+  color: var(--fc-muted);
+  margin: 0;
+}
+
+// ── Intro ────────────────────────────────────────────────
+
+.legal-intro {
+  padding: 18px 20px;
+  background: rgba(34, 197, 94, 0.06);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  border-radius: 12px;
+
+  p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--fc-text);
+
+    strong {
+      color: var(--fc-accent);
+    }
+  }
+}
+
+// ── Section ──────────────────────────────────────────────
+
+.legal-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--fc-font-heading);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--fc-text);
+    margin: 0;
+  }
+
+  .section-num {
+    font-family: var(--fc-font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--fc-primary);
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    border-radius: 5px;
+    padding: 2px 7px;
+    letter-spacing: 0.05em;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.75;
+    color: var(--fc-muted);
+
+    strong {
+      color: var(--fc-text);
+    }
+
+    a {
+      color: var(--fc-primary);
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(34, 197, 94, 0.4);
+      transition: color 0.2s, border-color 0.2s;
+
+      &:hover {
+        color: var(--fc-accent);
+        border-color: var(--fc-accent);
+      }
+    }
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    li {
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: var(--fc-muted);
+
+      strong {
+        color: var(--fc-text);
+      }
+    }
+  }
+}
+
+// ── Contact card ─────────────────────────────────────────
+
+.contact-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: var(--fc-surface);
+  border: 1px solid var(--fc-border);
+  border-radius: 10px;
+  color: var(--fc-muted);
+  font-size: 0.88rem;
+  font-family: var(--fc-font-mono);
+  width: fit-content;
+
+  svg {
+    color: var(--fc-primary);
+    flex-shrink: 0;
+  }
+}
+
+// ── Footer ───────────────────────────────────────────────
+
+.legal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding-top: 24px;
+  border-top: 1px solid var(--fc-border);
+  margin-top: 8px;
+
+  .legal-link {
+    font-size: 0.85rem;
+    color: var(--fc-primary);
+    text-decoration: none;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--fc-accent);
+    }
+  }
+
+  .divider {
+    color: var(--fc-border);
+    user-select: none;
+  }
+}
+
+// ── Responsive ───────────────────────────────────────────
+
+@media (max-width: 768px) {
+  .legal-page {
+    padding-top: 104px;
+    padding-left: max(24px, env(safe-area-inset-left, 24px));
+    padding-right: max(24px, env(safe-area-inset-right, 24px));
+  }
+}
+
+@media (max-width: 600px) {
+  .legal-page {
+    padding-top: 104px;
+    padding-left: max(24px, env(safe-area-inset-left, 24px));
+    padding-right: max(24px, env(safe-area-inset-right, 24px));
+    padding-bottom: 72px;
+  }
+
+  .legal-container {
+    gap: 24px;
+  }
+
+  .legal-header {
+    gap: 12px;
+    padding-bottom: 20px;
+  }
+
+  .legal-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    flex-shrink: 0;
+
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+
+  .legal-header-text h1 {
+    font-size: 1.3rem;
+    line-height: 1.2;
+  }
+
+  .legal-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .legal-intro {
+    padding: 14px 16px;
+    border-radius: 10px;
+
+    p {
+      font-size: 0.88rem;
+      line-height: 1.65;
+    }
+  }
+
+  .legal-section {
+    gap: 10px;
+
+    h2 {
+      font-size: 0.95rem;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .section-num {
+      font-size: 0.65rem;
+    }
+
+    p, li {
+      font-size: 0.875rem;
+      line-height: 1.65;
+    }
+
+    ul {
+      padding-left: 18px;
+      gap: 6px;
+    }
+  }
+
+  .contact-card {
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    font-size: 0.8rem;
+    padding: 10px 14px;
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .legal-footer {
+    padding-top: 20px;
+    margin-top: 4px;
+  }
+}
