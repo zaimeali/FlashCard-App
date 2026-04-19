@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { AddFlashcardDialog, AddFlashcardData } from './add-flashcard-dialog/add-flashcard-dialog';
+import { AddFlashcardDialog } from './add-flashcard-dialog/add-flashcard-dialog';
 import { HintsDialog } from './hints-dialog/hints-dialog';
 
 import { ActivatedRoute, RouterModule } from '@angular/router';
