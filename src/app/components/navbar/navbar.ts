@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
@@ -18,8 +18,15 @@ import { AuthService } from '../../services/auth/auth.service';
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })
-export class Navbar { 
-  constructor(private authService: AuthService) {}
+export class Navbar {
+  private router = inject(Router);
+
+  constructor(private authService: AuthService) { }
+
+  get isPublicPage(): boolean {
+    const url = this.router.url.split('?')[0];
+    return url === '/terms' || url === '/privacy-policy';
+  }
 
   public async logout() {
     await this.authService.logout();
