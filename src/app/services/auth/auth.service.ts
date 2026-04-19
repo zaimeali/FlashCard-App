@@ -33,13 +33,13 @@ export class AuthService {
     effect((onCleanUp) => {
       const user = this.userSignal();
 
-      onCleanUp(() => {});
+      onCleanUp(() => { });
     });
   }
 
   private async getSupabaseSession() {
     const { data: { session } } = await this.supabaseService.client.auth.getSession();
-      this.updateAuthState(session);
+    this.updateAuthState(session);
 
     // Listen for auth state changes and store unsubscribe function
     this.supabaseService.client.auth.onAuthStateChange((event, session) => {
@@ -61,19 +61,22 @@ export class AuthService {
     this.sessionSignal.set(session);
     this.userSignal.set(session?.user ?? null);
   }
-  
+
   public async loginWithGithub() {
     this.loadingSignal.set(true);
 
     try {
       const { data, error } = await this.supabaseService.client.auth.signInWithOAuth({
-        provider: AuthService.GITHUB_PROVIDER
+        provider: AuthService.GITHUB_PROVIDER,
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
       });
 
       if (error) throw error;
-      
+
       this.getSupabaseSession();
-      
+
       this.router.navigate(['/']);
 
       return { success: true };
@@ -103,7 +106,7 @@ export class AuthService {
 
       console.log('[AuthService] Navigating to login');
       await this.router.navigate([`/${Routes.LOGIN}`]);
-    } catch(error) {
+    } catch (error) {
       alert("Error Logging Out");
       console.error("Logout Error: ", error);
     }
