@@ -85,19 +85,32 @@
 
     .fc-form-actions {
       display: flex;
-      justify-content: flex-end;
+      justify-content: center;
 
       @media (max-width: 768px) {
         justify-content: center;
         margin-top: 0.5rem;
       }
 
-      .fc-update-btn {
+      .fc-delete-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        color: var(--fc-danger);
+        border-color: var(--fc-danger);
         transition: all 0.2s ease-in-out;
-        
+
+        mat-icon {
+          font-size: 1.15rem;
+          height: 1.15rem;
+          width: 1.15rem;
+          color: var(--fc-danger);
+        }
+
         &:hover, &:focus {
+          background: rgba(248, 113, 113, 0.1);
           transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+          box-shadow: 0 4px 12px rgba(248, 113, 113, 0.25);
         }
 
         @media (max-width: 768px) {

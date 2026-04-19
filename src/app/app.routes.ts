@@ -1,42 +1,48 @@
 import { Routes } from '@angular/router';
-import { Login } from './components/auth/login/login';
-import { Home } from './components/home/home';
-import { Dashboard } from './components/dashboard/dashboard';
-import { Profile } from './components/auth/profile/profile';
-import { Flashcards } from './components/flashcards/flashcards';
-import { GroupDetail } from './components/flashcards/group-detail/group-detail';
+import { authGuard, loginGuard } from './utils/auth-guard/auth-guard';
+import { Routes as RoutesEnum } from './utils/auth-guard/constants/routes';
+
 
 export const routes: Routes = [
     {
-        path: 'login',
-        component: Login
+        path: RoutesEnum.LOGIN,
+        loadComponent: () => import('./components/auth/login/login').then(m => m.Login),
+        canActivate: [ loginGuard ]
     },
     {
-        path: 'login',
-        component: Login
+        path: RoutesEnum.HOME,
+        loadComponent: () => import('./components/home/home').then(m => m.Home),
+        canActivate: [ authGuard ]
     },
     {
-        path: '',
-        component: Home
-    },
-    {
-        path: 'dashboard',
-        component: Dashboard
+        path: RoutesEnum.DASHBOARD,
+        loadComponent: () => import('./components/dashboard/dashboard').then(m => m.Dashboard),
+        canActivate: [ authGuard ]
     },
     {
         path: 'profile',
-        component: Profile
+        loadComponent: () => import('./components/auth/profile/profile').then(m => m.Profile),
+        canActivate: [ authGuard ]
     },
     {
         path: 'flashcards/create/group',
-        component: GroupDetail
+        loadComponent: () => import('./components/flashcards/group-detail/group-detail').then(m => m.GroupDetail),
+        canActivate: [ authGuard ]
     },
     {
         path: 'flashcards/edit/:id',
-        component: GroupDetail
+        loadComponent: () => import('./components/flashcards/group-detail/group-detail').then(m => m.GroupDetail),
+        canActivate: [ authGuard ]
     },
     {
         path: 'flashcards/:id',
-        component: Flashcards
-    }
+        loadComponent: () => import('./components/flashcards/flashcards').then(m => m.Flashcards),
+        canActivate: [ authGuard ]
+    },
+    // {
+    //     path: '**',
+    //     loadComponent: () => import('./components/home/home').then(m => m.Home),
+    //     canActivate: [ authGuard ]
+    // }, // wildcard for default
+    // also add a logic where if the user is logged in and tries to access login page, redirect to home page
 ];
