@@ -8,17 +8,17 @@
             <div class="fc-form-row">
                 <mat-form-field appearance="outline" class="fc-profile-field">
                     <mat-label>Name</mat-label>
-                    <input matInput placeholder="Enter your name">
+                    <input matInput readonly disabled [value]="name">
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="fc-profile-field">
                     <mat-label>Email</mat-label>
-                    <input matInput placeholder="Enter your email">
+                    <input matInput readonly disabled [value]="email">
                 </mat-form-field>
             </div>
 
             <div class="fc-form-actions">
-                <button mat-stroked-button class="fc-delete-btn">
+                <button mat-stroked-button class="fc-delete-btn" (click)="deleteAccount()">
                     Delete Account
                     <mat-icon>delete</mat-icon>
                 </button>

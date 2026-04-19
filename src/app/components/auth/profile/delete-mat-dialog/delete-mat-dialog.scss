@@ -1,0 +1,45 @@
+.confirm-dialog-container {
+  padding: 1.5rem;
+  min-width: 320px;
+
+  h2 {
+    color: var(--fc-text);
+    font-family: var(--fc-font-heading);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  mat-dialog-content {
+    color: var(--fc-muted);
+    font-family: var(--fc-font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    padding: 0;
+  }
+
+  mat-dialog-actions {
+    padding: 0;
+    gap: 0.75rem;
+
+    button {
+      text-transform: none;
+      font-weight: 500;
+      letter-spacing: normal;
+    }
+
+    .confirm-button {
+      background-color: var(--fc-danger) !important;
+      color: white !important;
+    }
+  }
+}
+
+:host {
+  display: block;
+  background: var(--fc-card);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 0.5px solid var(--fc-border);
+}
