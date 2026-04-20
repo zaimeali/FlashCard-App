@@ -155,8 +155,8 @@
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    min-height: 180px; 
-    
+    height: 180px; 
+    overflow: hidden;    
     flex: 0 1 calc(33.333% - 1rem); 
     min-width: 280px; 
     
@@ -167,6 +167,7 @@
     @media (max-width: 768px) {
       flex: 1 1 100%;
       min-width: 100%;
+      height: auto;
       min-height: auto;
       padding: 1.25rem;
       border-left: 4px solid var(--fc-primary);

@@ -73,7 +73,7 @@ export class HintsDialog {
   constructor(
     public dialogRef: MatDialogRef<HintsDialog>,
     @Inject(MAT_DIALOG_DATA) public hints: string[]
-  ) {}
+  ) { }
 
   close() {
     this.dialogRef.close();

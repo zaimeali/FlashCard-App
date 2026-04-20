@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,6 +9,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { FlashCardGroup } from '../../models/FlashCardGroup.model';
+import { FlashcardService } from '../../services/flashcards/flashcard-service';
 
 @Component({
   selector: 'app-home',
@@ -42,7 +44,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
-export class Home {
+export class Home implements OnInit {
   private router = inject(Router);
 
   groups = [
@@ -70,35 +72,61 @@ export class Home {
   // Pagination
   readonly INITIAL_GROUPS = 12;
   readonly LOAD_MORE_GROUPS = 6;
-  visibleGroupsCount = this.INITIAL_GROUPS;
+  visibleGroupsCount = signal<number>(this.INITIAL_GROUPS);
+
+  flashCardsGroup = signal<Array<FlashCardGroup>>([]);
+  isLoading = signal<boolean>(false);
+  errorMessage = signal<string>('');
 
   // Inline Editing
   editingGroupId = signal<string | null>(null);
   editName = signal<string>('');
   editDescription = signal<string>('');
 
-  get totalCards() {
-    return this.groups.reduce((acc, currentGroup) => acc + currentGroup.cardCount, 0);
-  }
+  totalCards = computed(() => {
+    if (this.isLoading()) return 0;
+    return this.flashCardsGroup().reduce((acc, group) => acc + (group.flashcards?.length || 0), 0);
+  });
 
-  get visibleGroups() {
-    return this.groups.slice(0, this.visibleGroupsCount);
-  }
+  visibleGroups = computed(() => {
+    if (this.isLoading()) return [];
+    return this.flashCardsGroup().slice(0, this.visibleGroupsCount());
+  });
 
-  get canLoadMore() {
-    return this.groups.length > this.visibleGroupsCount;
+  canLoadMore = computed(() => {
+    return this.flashCardsGroup().length > this.visibleGroupsCount();
+  });
+
+  constructor(private flashcardService: FlashcardService) { }
+
+  ngOnInit(): void {
+    this.loadFlashCardGroups();
   }
 
   loadMore() {
-    this.visibleGroupsCount += this.LOAD_MORE_GROUPS;
+    this.visibleGroupsCount.update(count => count + this.LOAD_MORE_GROUPS);
+  }
+
+  private async loadFlashCardGroups(): Promise<void> {
+    try {
+      this.isLoading.set(true);
+      this.errorMessage.set('');
+
+      const flashCardGroups = await this.flashcardService.getFlashCardGroups();
+      this.flashCardsGroup.set(flashCardGroups);
+    } catch (error) {
+      this.errorMessage.set(error as string)
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 
   deleteGroup(id: string) {
-    this.groups = this.groups.filter(group => group.id !== id);
+    this.flashCardsGroup.update(groups => groups.filter(group => group.flashCardGroupId !== id));
   }
 
-  startEdit(group: any) {
-    this.editingGroupId.set(group.id);
+  startEdit(group: FlashCardGroup) {
+    this.editingGroupId.set(group.flashCardGroupId);
     this.editName.set(group.name);
     this.editDescription.set(group.description);
   }
@@ -110,16 +138,18 @@ export class Home {
   saveEdit() {
     const id = this.editingGroupId();
     if (id) {
-      this.groups = this.groups.map(g =>
-        g.id === id ? { ...g, name: this.editName(), description: this.editDescription() } : g
+      this.flashCardsGroup.update(groups =>
+        groups.map(g =>
+          g.flashCardGroupId === id ? { ...g, name: this.editName(), description: this.editDescription() } : g
+        )
       );
     }
     this.editingGroupId.set(null);
   }
 
-  openGroup(group: any) {
-    if (this.editingGroupId() === group.id) return; // Don't navigate while editing
-    this.router.navigate(['/flashcards', group.id]);
+  openGroup(group: FlashCardGroup) {
+    if (this.editingGroupId() === group.flashCardGroupId) return; // Don't navigate while editing
+    this.router.navigate(['/flashcards', group.flashCardGroupId]);
   }
 
   createGroup() {

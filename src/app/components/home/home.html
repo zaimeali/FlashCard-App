@@ -11,17 +11,17 @@
                 </mat-form-field>
             </div>
             <div class="fc-header-right">
-                <span class="fc-total-cards-label">Total cards: {{ totalCards }}</span>
+                <span class="fc-total-cards-label">Total cards: {{ totalCards() }}</span>
                 <button mat-raised-button color="primary" class="fc-create-group-btn" (click)="createGroup()">
                     Create Group <mat-icon iconPositionEnd>add</mat-icon>
                 </button>
             </div>
         </div>
         <div class="fc-group-list">
-            @for (group of visibleGroups; track group.id) {
+            @for (group of visibleGroups(); track group.flashCardGroupId) {
             <mat-card class="fc-group-card" (click)="openGroup(group)" tabindex="0" role="button" @cardAnimation>
                 <div class="fc-card-header-row">
-                    @if (editingGroupId() === group.id) {
+                    @if (editingGroupId() === group.flashCardGroupId) {
                     <input class="fc-edit-input title" [(ngModel)]="editName" (click)="$event.stopPropagation()"
                         autoFocus>
                     } @else {
@@ -29,7 +29,7 @@
                     }
 
                     <div class="fc-card-actions">
-                        @if (editingGroupId() === group.id) {
+                        @if (editingGroupId() === group.flashCardGroupId) {
                         <button mat-icon-button class="fc-action-btn save"
                             (click)="saveEdit(); $event.stopPropagation()" aria-label="Save">
                             <mat-icon>check</mat-icon>
@@ -51,26 +51,31 @@
                             <mat-icon>edit</mat-icon>
                             <span>Edit</span>
                         </button>
-                        <button mat-menu-item (click)="deleteGroup(group.id); $event.stopPropagation()">
+                        <button mat-menu-item (click)="deleteGroup(group.flashCardGroupId); $event.stopPropagation()">
                             <mat-icon>delete</mat-icon>
                             <span>Delete</span>
                         </button>
                     </mat-menu>
                 </div>
                 <mat-card-content>
-                    @if (editingGroupId() === group.id) {
+                    @if (editingGroupId() === group.flashCardGroupId) {
                     <textarea class="fc-edit-input description" [(ngModel)]="editDescription"
                         (click)="$event.stopPropagation()"></textarea>
                     } @else {
                     <p>{{ group.description }}</p>
                     }
-                    <p class="fc-card-count">{{ group.cardCount }} cards</p>
+                    <p class="fc-card-count">{{ group.flashcards.length }} cards</p>
                 </mat-card-content>
             </mat-card>
             }
-            @if (canLoadMore) {
+            @if (canLoadMore()) {
             <div class="fc-load-more-row">
                 <button mat-raised-button color="primary" (click)="loadMore()">Load More</button>
+            </div>
+            }
+            @else {
+            <div class="fc-load-more-row">
+                <p>No more flashcards group to show</p>
             </div>
             }
         </div>
