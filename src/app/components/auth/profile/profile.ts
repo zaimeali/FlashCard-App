@@ -15,8 +15,7 @@ import { ConfirmDialogComponent } from './delete-mat-dialog/delete-mat-dialog';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule,
-    ConfirmDialogComponent
+    MatIconModule
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',

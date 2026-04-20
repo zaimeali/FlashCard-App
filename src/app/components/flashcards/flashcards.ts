@@ -1,5 +1,5 @@
 import { Component, computed, signal } from '@angular/core';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Flashcard } from './flashcard/flashcard';
@@ -25,21 +25,21 @@ export class Flashcards {
   ];
 
   currentIndex = signal(0);
-  
+
   // Statistics as signals
   correctCount = signal(0);
   incorrectCount = signal(0);
   skippedCount = signal(0);
-  
+
   // Track individual card statuses
   cardStatuses = signal<Record<string, CardStatus>>({});
-  
+
   totalCards = this.flashcardsMockData.length;
   visibleHintIndices = signal<Set<number>>(new Set());
 
   // Computed percentages
   totalAnswered = computed(() => this.correctCount() + this.incorrectCount() + this.skippedCount());
-  
+
   correctPercentage = computed(() => this.totalAnswered() ? (this.correctCount() / this.totalAnswered()) * 100 : 0);
   incorrectPercentage = computed(() => this.totalAnswered() ? (this.incorrectCount() / this.totalAnswered()) * 100 : 0);
   skippedPercentage = computed(() => this.totalAnswered() ? (this.skippedCount() / this.totalAnswered()) * 100 : 0);
@@ -80,7 +80,7 @@ export class Flashcards {
       this.visibleHintIndices.set(currentSet);
     }
   }
-  
+
   isHintVisible(index: number): boolean {
     return this.visibleHintIndices().has(index);
   }
@@ -103,7 +103,7 @@ export class Flashcards {
   updateCardStatus(id: string, status: CardStatus) {
     const currentStatuses = this.cardStatuses();
     const prevStatus = currentStatuses[id] || 'none';
-    
+
     // Don't update if already answered with the same status
     if (prevStatus === status) return;
 
@@ -129,14 +129,14 @@ export class Flashcards {
       this.updateCardStatus(currentId, 'skipped');
     }
 
-    this.visibleHintIndices.set(new Set()); 
+    this.visibleHintIndices.set(new Set());
     if (this.currentIndex() < this.totalCards - 1) {
       this.currentIndex.update(i => i + 1);
     }
   }
 
   prevCard() {
-    this.visibleHintIndices.set(new Set()); 
+    this.visibleHintIndices.set(new Set());
     if (this.currentIndex() > 0) {
       this.currentIndex.update(i => i - 1);
     }

@@ -9,6 +9,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { FlashCardGroup } from '../../models/FlashCardGroup.model';
 
 @Component({
   selector: 'app-home',
@@ -45,6 +46,8 @@ import { FormsModule } from '@angular/forms';
 export class Home {
   private router = inject(Router);
 
+  flashCardsGroup: Array<FlashCardGroup> = [];
+
   groups = [
     { id: '1', name: 'Biology', description: 'Cell structure, genetics, and more.', cardCount: 24 },
     { id: '2', name: 'History', description: 'World history flashcards.', cardCount: 15 },
@@ -78,15 +81,15 @@ export class Home {
   editDescription = signal<string>('');
 
   get totalCards() {
-    return this.groups.reduce((acc, currentGroup) => acc + currentGroup.cardCount, 0);
+    return this.flashCardsGroup.reduce((acc, currentGroup) => acc + currentGroup.flashcards.length, 0);
   }
 
   get visibleGroups() {
-    return this.groups.slice(0, this.visibleGroupsCount);
+    return this.flashCardsGroup.slice(0, this.visibleGroupsCount);
   }
 
   get canLoadMore() {
-    return this.groups.length > this.visibleGroupsCount;
+    return this.flashCardsGroup.length > this.visibleGroupsCount;
   }
 
   loadMore() {
@@ -94,7 +97,7 @@ export class Home {
   }
 
   deleteGroup(id: string) {
-    this.groups = this.groups.filter(group => group.id !== id);
+    this.flashCardsGroup = this.flashCardsGroup.filter(group => group.flashCardGroupId !== id);
   }
 
   startEdit(group: any) {
