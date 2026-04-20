@@ -30,4 +30,19 @@ export class FlashcardService {
       throw new Error('Error creating flashcard group');
     }
   }
+
+  public async getFlashCardGroups(): Promise<Array<FlashCardGroup>> {
+    try {
+      const { data, error } = await this.supabaseService.client.rpc('get_all_flashcardgroups');
+
+      if (error) {
+        throw error;
+      }
+
+      return data as Array<FlashCardGroup>;
+    } catch (error) {
+      console.error('Error getting flashcard groups: ', error);
+      throw new Error('Error getting flashcard groups');
+    }
+  }
 }

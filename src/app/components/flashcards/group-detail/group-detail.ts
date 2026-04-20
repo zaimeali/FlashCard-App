@@ -14,6 +14,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FlashcardService } from '../../../services/flashcards/flashcard-service';
 import { AuthService } from '../../../services/auth/auth.service';
 import { FlashCardGroup } from '../../../models/FlashCardGroup.model';
+import { User } from '@supabase/supabase-js';
 
 export interface FlashcardItem {
   question: string;
@@ -44,6 +45,7 @@ export class GroupDetail implements OnInit {
   displayedColumns: string[] = ['question', 'answer', 'hints', 'actions'];
   isEditMode = signal(false);
   expandedIndex = signal<number | null>(null);
+  currentUser!: User;
 
   isAddGroupDisabled = computed(() => this.flashcards().length === 0 || this.groupForm.invalid);
 
@@ -60,6 +62,13 @@ export class GroupDetail implements OnInit {
   }
 
   ngOnInit() {
+    this.currentUser = this.authService.user()!;
+
+    if (!this.currentUser) {
+      alert('You must be logged in to access this page');
+      // Potentially redirect here if necessary
+    }
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEditMode.set(true);
@@ -68,8 +77,6 @@ export class GroupDetail implements OnInit {
   }
 
   private loadGroupData(id: string) {
-    // Mocking an API response
-    // In a real app, this would come from a FlashcardService
     const mockData = {
       name: 'Biology Basics',
       description: 'Foundational concepts in biology including cell structures and basic processes.',
@@ -132,28 +139,22 @@ export class GroupDetail implements OnInit {
 
   saveGroup() {
     if (this.groupForm.valid && this.flashcards().length > 0) {
-      const user = this.authService.user();
-      if (!user) {
-        alert('You must be logged in to create a flashcard group');
-        return;
-      }
-
       const payload: FlashCardGroup = {
         flashCardGroupId: '', // Usually handled by DB or generated if needed
         name: this.groupForm.value.groupName,
         description: this.groupForm.value.groupDescription,
-        userId: user.id,
+        userId: this.currentUser.id,
         flashcards: this.flashcards().map(fc => ({
           flashCardId: '', // Usually handled by DB
           question: fc.question,
           answer: fc.answer,
-          userId: user.id,
+          userId: this.currentUser.id,
           createdAt: new Date(),
           updatedAt: new Date(),
           hints: fc.hints.map(h => ({
             hintId: '', // Usually handled by DB
             hint: h,
-            userId: user.id,
+            userId: this.currentUser.id,
             createdAt: new Date(),
             updatedAt: new Date(),
           }))
