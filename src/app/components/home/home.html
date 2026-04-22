@@ -18,7 +18,10 @@
             </div>
         </div>
         <div class="fc-group-list">
-            @for (group of visibleGroups(); track group.flashCardGroupId) {
+            <ngx-spinner [fullScreen]="false" type="fire" size="medium" color="#ff5722"
+                bdColor="rgba(0, 0, 0, 0.0)"></ngx-spinner>
+            @if (visibleGroups().length > 0) {
+            @for (group of visibleGroups(); track group.flashCardGroupId || $index) {
             <mat-card class="fc-group-card" (click)="openGroup(group)" tabindex="0" role="button" @cardAnimation>
                 <div class="fc-card-header-row">
                     @if (editingGroupId() === group.flashCardGroupId) {
@@ -47,11 +50,12 @@
                     </div>
 
                     <mat-menu #cardMenu="matMenu">
-                        <button mat-menu-item (click)="startEdit(group); $event.stopPropagation()">
+                        <button mat-menu-item class="fc-edit-item" (click)="startEdit(group); $event.stopPropagation()">
                             <mat-icon>edit</mat-icon>
                             <span>Edit</span>
                         </button>
-                        <button mat-menu-item (click)="deleteGroup(group.flashCardGroupId); $event.stopPropagation()">
+                        <button mat-menu-item class="fc-delete-item"
+                            (click)="deleteGroup(group.flashCardGroupId); $event.stopPropagation()">
                             <mat-icon>delete</mat-icon>
                             <span>Delete</span>
                         </button>
@@ -73,7 +77,8 @@
                 <button mat-raised-button color="primary" (click)="loadMore()">Load More</button>
             </div>
             }
-            @else {
+            }
+            @else if (!isLoading()) {
             <div class="fc-load-more-row">
                 <p>No more flashcards group to show</p>
             </div>

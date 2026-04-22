@@ -11,6 +11,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FlashCardGroup } from '../../models/FlashCardGroup.model';
 import { FlashcardService } from '../../services/flashcards/flashcard-service';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { AlertService } from '../../services/alert/alert.service';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +25,8 @@ import { FlashcardService } from '../../services/flashcards/flashcard-service';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    MatMenuModule
+    MatMenuModule,
+    NgxSpinnerModule
   ],
   animations: [
     trigger('cardAnimation', [
@@ -46,6 +49,7 @@ import { FlashcardService } from '../../services/flashcards/flashcard-service';
 })
 export class Home implements OnInit {
   private router = inject(Router);
+  private alertService = inject(AlertService);
 
   groups = [
     { id: '1', name: 'Biology', description: 'Cell structure, genetics, and more.', cardCount: 24 },
@@ -97,7 +101,7 @@ export class Home implements OnInit {
     return this.flashCardsGroup().length > this.visibleGroupsCount();
   });
 
-  constructor(private flashcardService: FlashcardService) { }
+  constructor(private flashcardService: FlashcardService, private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
     this.loadFlashCardGroups();
@@ -111,18 +115,42 @@ export class Home implements OnInit {
     try {
       this.isLoading.set(true);
       this.errorMessage.set('');
+      this.spinner.show();
 
       const flashCardGroups = await this.flashcardService.getFlashCardGroups();
+      console.log('Flashcard groups: ', flashCardGroups);
       this.flashCardsGroup.set(flashCardGroups);
     } catch (error) {
       this.errorMessage.set(error as string)
     } finally {
       this.isLoading.set(false);
+      this.spinner.hide();
     }
   }
 
-  deleteGroup(id: string) {
-    this.flashCardsGroup.update(groups => groups.filter(group => group.flashCardGroupId !== id));
+  async deleteGroup(id: string) {
+    if (!id || id.trim() === '') {
+      this.alertService.error('Error', 'Invalid Group ID provided for deletion.');
+      return;
+    }
+
+    const dialogRef = this.alertService.confirm(
+      'Delete Group?',
+      'Are you sure you want to delete this flashcard group? This action cannot be undone.',
+      'Delete',
+      'Cancel'
+    );
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        try {
+          await this.flashcardService.deleteFlashCardGroup(id);
+          this.flashCardsGroup.update(groups => groups.filter(group => group.flashCardGroupId !== id));
+        } catch (error) {
+          console.error('Error deleting flashcard group: ', error);
+        }
+      }
+    });
   }
 
   startEdit(group: FlashCardGroup) {
