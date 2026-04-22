@@ -1,13 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { FlashCardGroup } from '../../models/FlashCardGroup.model';
 import { SupabaseService } from '../supabase/supabase.service';
 import { Router } from '@angular/router';
 import { Routes } from '../../utils/auth-guard/constants/routes';
+import { AlertService } from '../alert/alert.service';
+import { mapToFlashCardGroup } from '../../utils/mappers/flashcard-mapper';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FlashcardService {
+  private alertService = inject(AlertService);
 
   constructor(private supabaseService: SupabaseService, private router: Router) { }
 
@@ -22,11 +25,12 @@ export class FlashcardService {
       }
 
       console.log('Flashcard group created successfully: ', data);
-      alert('Flashcard group created successfully');
+      this.alertService.success('Success!', 'Flashcard group created successfully');
 
       this.router.navigate([Routes.HOME]);
     } catch (error) {
       console.error('Error creating flashcard group: ', error);
+      this.alertService.error('Error', 'Failed to create flashcard group. Please try again.');
       throw new Error('Error creating flashcard group');
     }
   }
@@ -39,10 +43,32 @@ export class FlashcardService {
         throw error;
       }
 
-      return data as Array<FlashCardGroup>;
+      const rawData = data as any[];
+      return rawData.map(group => mapToFlashCardGroup(group));
     } catch (error) {
       console.error('Error getting flashcard groups: ', error);
       throw new Error('Error getting flashcard groups');
+    }
+  }
+
+  public async deleteFlashCardGroup(flashCardGroupId: string): Promise<void> {
+    try {
+      const { data, error } = await this.supabaseService.client.rpc('delete_flashcard_group', {
+        p_flashcard_group_id: flashCardGroupId
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      console.log('Flashcard group deleted successfully: ', data);
+      this.alertService.success('Deleted!', 'Flashcard group deleted successfully');
+
+      this.router.navigate([Routes.HOME]);
+    } catch (error) {
+      console.error('Error deleting flashcard group: ', error);
+      this.alertService.error('Error', 'Failed to delete flashcard group. Please verify that the group exists and you have permission to delete it.');
+      throw new Error('Error deleting flashcard group');
     }
   }
 }

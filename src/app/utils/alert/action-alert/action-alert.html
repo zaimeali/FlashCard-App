@@ -1,0 +1,27 @@
+<div class="alert-container" [ngClass]="data.type">
+    <div class="alert-header">
+        <div [class]="iconClass">
+            <mat-icon>{{ icon }}</mat-icon>
+        </div>
+        <h2 mat-dialog-title>{{ data.title }}</h2>
+    </div>
+
+    <mat-dialog-content>
+        <p class="alert-message">{{ data.message }}</p>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="center">
+        <button mat-button 
+                *ngIf="data.isConfirmation"
+                (click)="dialogRef.close(false)"
+                class="cancel-button">
+            {{ data.cancelText || 'Cancel' }}
+        </button>
+        <button mat-raised-button 
+                [color]="(data.type === 'error' || data.isConfirmation) ? 'warn' : 'primary'"
+                (click)="dialogRef.close(true)"
+                class="action-button fc-confirm-btn">
+            {{ data.confirmText || (data.isConfirmation ? 'Confirm' : 'Got it') }}
+        </button>
+    </mat-dialog-actions>
+</div>

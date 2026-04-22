@@ -126,6 +126,7 @@
   }
 
   .fc-group-list {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     gap: 1.5rem;
@@ -291,6 +292,20 @@
         }
       }
     }
+  }
+}
+
+::ng-deep .fc-edit-item {
+  color: var(--fc-primary) !important;
+  mat-icon {
+    color: var(--fc-primary) !important;
+  }
+}
+
+::ng-deep .fc-delete-item {
+  color: var(--fc-danger) !important;
+  mat-icon {
+    color: var(--fc-danger) !important;
   }
 }
 
