@@ -118,7 +118,6 @@ export class Home implements OnInit {
       this.spinner.show();
 
       const flashCardGroups = await this.flashcardService.getFlashCardGroups();
-      console.log('Flashcard groups: ', flashCardGroups);
       this.flashCardsGroup.set(flashCardGroups);
     } catch (error) {
       this.errorMessage.set(error as string)
@@ -163,16 +162,36 @@ export class Home implements OnInit {
     this.editingGroupId.set(null);
   }
 
-  saveEdit() {
+  async saveEdit() {
     const id = this.editingGroupId();
-    if (id) {
-      this.flashCardsGroup.update(groups =>
-        groups.map(g =>
-          g.flashCardGroupId === id ? { ...g, name: this.editName(), description: this.editDescription() } : g
-        )
-      );
+    if (!id) return;
+
+    const currentGroups = this.flashCardsGroup();
+    const groupToUpdate = currentGroups.find(g => g.flashCardGroupId === id);
+
+    if (!groupToUpdate) {
+      this.editingGroupId.set(null);
+      return;
     }
-    this.editingGroupId.set(null);
+
+    const updatedGroup = {
+      ...groupToUpdate,
+      name: this.editName(),
+      description: this.editDescription()
+    };
+
+    try {
+      this.flashCardsGroup.update(groups =>
+        groups.map(g => g.flashCardGroupId === id ? updatedGroup : g)
+      );
+      this.editingGroupId.set(null);
+
+      await this.flashcardService.updateFlashCardGroup(updatedGroup);
+    } catch (error) {
+      this.flashCardsGroup.set(currentGroups);
+      console.error('Failed to update group:', error);
+      this.alertService.error('Error', 'Failed to update group');
+    }
   }
 
   openGroup(group: FlashCardGroup) {

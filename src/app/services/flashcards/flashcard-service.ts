@@ -63,12 +63,30 @@ export class FlashcardService {
 
       console.log('Flashcard group deleted successfully: ', data);
       this.alertService.success('Deleted!', 'Flashcard group deleted successfully');
-
-      this.router.navigate([Routes.HOME]);
     } catch (error) {
       console.error('Error deleting flashcard group: ', error);
       this.alertService.error('Error', 'Failed to delete flashcard group. Please verify that the group exists and you have permission to delete it.');
       throw new Error('Error deleting flashcard group');
+    }
+  }
+
+  public async updateFlashCardGroup(flashCardGroup: FlashCardGroup): Promise<void> {
+    try {
+      const { data, error } = await this.supabaseService.client.rpc('update_flashcard_group', {
+        p_flashcard_group_id: flashCardGroup.flashCardGroupId,
+        p_flashcard_group_name: flashCardGroup.name,
+        p_flashcard_group_description: flashCardGroup.description
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      console.log('Flashcard group updated successfully: ', data);
+    } catch (error) {
+      console.error('Error updating flashcard group: ', error);
+      this.alertService.error('Error', 'Failed to update flashcard group. Please try again.');
+      throw new Error('Error updating flashcard group');
     }
   }
 }

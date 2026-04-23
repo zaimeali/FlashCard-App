@@ -303,6 +303,23 @@
         }
       }
     }
+    &.is-editing {
+      padding-top: 0.8rem;
+      padding-bottom: 0.8rem;
+
+      .fc-card-header-row {
+        margin-bottom: 0.4rem;
+      }
+
+      .fc-edit-input.description {
+        height: 48px;
+        margin-bottom: 0;
+      }
+
+      mat-card-content .fc-card-count {
+        margin-top: 0.4rem;
+      }
+    }
   }
 }
 
