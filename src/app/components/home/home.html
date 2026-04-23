@@ -7,7 +7,7 @@
             <div class="fc-header-middle">
                 <mat-form-field appearance="outline" class="fc-search-bar" subscriptSizing="dynamic">
                     <mat-icon matPrefix>search</mat-icon>
-                    <input matInput placeholder="Search groups...">
+                    <input matInput placeholder="Search groups..." (input)="onSearch($event)">
                 </mat-form-field>
             </div>
             <div class="fc-header-right">

@@ -87,19 +87,32 @@ export class Home implements OnInit {
   editName = signal<string>('');
   editDescription = signal<string>('');
 
+  // Search and Filtering
+  searchTerm = signal<string>('');
+
   totalCards = computed(() => {
     if (this.isLoading()) return 0;
     return this.flashCardsGroup().reduce((acc, group) => acc + (group.flashcards?.length || 0), 0);
   });
 
+  filteredGroups = computed(() => {
+    const term = this.searchTerm().toLowerCase().trim();
+    if (!term) return this.flashCardsGroup();
+
+    return this.flashCardsGroup().filter(group =>
+      group.name.toLowerCase().includes(term)
+    );
+  });
+
   visibleGroups = computed(() => {
     if (this.isLoading()) return [];
-    return this.flashCardsGroup().slice(0, this.visibleGroupsCount());
+    return this.filteredGroups().slice(0, this.visibleGroupsCount());
   });
 
   canLoadMore = computed(() => {
-    return this.flashCardsGroup().length > this.visibleGroupsCount();
+    return this.filteredGroups().length > this.visibleGroupsCount();
   });
+
 
   constructor(private flashcardService: FlashcardService, private spinner: NgxSpinnerService) { }
 
@@ -110,6 +123,14 @@ export class Home implements OnInit {
   loadMore() {
     this.visibleGroupsCount.update(count => count + this.LOAD_MORE_GROUPS);
   }
+
+  onSearch(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.searchTerm.set(input.value);
+    // Reset pagination when searching
+    this.visibleGroupsCount.set(this.INITIAL_GROUPS);
+  }
+
 
   private async loadFlashCardGroups(): Promise<void> {
     try {
