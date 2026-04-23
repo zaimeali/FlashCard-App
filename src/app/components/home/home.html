@@ -22,7 +22,7 @@
                 bdColor="rgba(0, 0, 0, 0.0)"></ngx-spinner>
             @if (visibleGroups().length > 0) {
             @for (group of visibleGroups(); track group.flashCardGroupId || $index) {
-            <mat-card class="fc-group-card" (click)="openGroup(group)" tabindex="0" role="button" @cardAnimation>
+            <mat-card class="fc-group-card" [class.is-editing]="editingGroupId() === group.flashCardGroupId" (click)="openGroup(group)" tabindex="0" role="button" @cardAnimation>
                 <div class="fc-card-header-row">
                     @if (editingGroupId() === group.flashCardGroupId) {
                     <input class="fc-edit-input title" [(ngModel)]="editName" (click)="$event.stopPropagation()"
