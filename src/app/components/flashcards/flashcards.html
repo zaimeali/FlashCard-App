@@ -7,7 +7,7 @@
       <h2>Biology Flashcards</h2>
       <p>Total Flashcards: {{ totalCards }}</p>
     </div>
-    <a mat-icon-button [routerLink]="['/flashcards/edit', '1']" class="fc-edit-group-btn" title="Edit Group">
+    <a mat-icon-button [routerLink]="['/flashcards/edit', groupId()]" class="fc-edit-group-btn" title="Edit Group">
       <mat-icon>edit</mat-icon>
     </a>
   </div>

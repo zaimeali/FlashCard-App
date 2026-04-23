@@ -43,11 +43,35 @@ export class FlashcardService {
         throw error;
       }
 
-      const rawData = data as any[];
-      return rawData.map(group => mapToFlashCardGroup(group));
+      return (data as any[]).map(group => mapToFlashCardGroup(group));
     } catch (error) {
       console.error('Error getting flashcard groups: ', error);
       throw new Error('Error getting flashcard groups');
+    }
+  }
+
+  public async getFlashCardGroupById(id: string): Promise<FlashCardGroup> {
+    try {
+      const { data, error } = await this.supabaseService.client
+        .from('flashcardgroup')
+        .select(`
+          *,
+          flashcards:flashcard (
+            *,
+            hints (*)
+          )
+        `)
+        .eq('flashcardgroupid', id)
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      return mapToFlashCardGroup(data);
+    } catch (error) {
+      console.error('Error getting flashcard group by id: ', error);
+      throw new Error('Error getting flashcard group by id');
     }
   }
 
@@ -87,6 +111,27 @@ export class FlashcardService {
       console.error('Error updating flashcard group: ', error);
       this.alertService.error('Error', 'Failed to update flashcard group. Please try again.');
       throw new Error('Error updating flashcard group');
+    }
+  }
+
+  public async editFlashCards(flashCardGroup: FlashCardGroup): Promise<void> {
+    try {
+      const { data, error } = await this.supabaseService.client.rpc('update_flashcards', {
+        p_payload: flashCardGroup
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      console.log('Flashcard group updated successfully: ', data);
+      this.alertService.success('Updated!', 'Flashcard group updated successfully');
+
+      this.router.navigate([Routes.HOME]);
+    } catch (error) {
+      console.error('Error updating flashcards: ', error);
+      this.alertService.error('Error', 'Failed to update flashcards. Please try again.');
+      throw new Error('Error updating flashcards');
     }
   }
 }

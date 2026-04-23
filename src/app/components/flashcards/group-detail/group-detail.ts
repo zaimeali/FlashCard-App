@@ -15,11 +15,13 @@ import { FlashcardService } from '../../../services/flashcards/flashcard-service
 import { AuthService } from '../../../services/auth/auth.service';
 import { FlashCardGroup } from '../../../models/FlashCardGroup.model';
 import { User } from '@supabase/supabase-js';
+import { HintItem } from './add-flashcard-dialog/add-flashcard-dialog';
 
 export interface FlashcardItem {
+  flashCardId?: string;
   question: string;
   answer: string;
-  hints: string[];
+  hints: HintItem[];
 }
 
 @Component({
@@ -44,6 +46,7 @@ export class GroupDetail implements OnInit {
   flashcards = signal<FlashcardItem[]>([]);
   displayedColumns: string[] = ['question', 'answer', 'hints', 'actions'];
   isEditMode = signal(false);
+  groupId = signal<string | null>(null);
   expandedIndex = signal<number | null>(null);
   currentUser!: User;
 
@@ -72,25 +75,34 @@ export class GroupDetail implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEditMode.set(true);
+      this.groupId.set(id);
       this.loadGroupData(id);
     }
   }
 
-  private loadGroupData(id: string) {
-    const mockData = {
-      name: 'Biology Basics',
-      description: 'Foundational concepts in biology including cell structures and basic processes.',
-      cards: [
-        { question: 'Mitochondria', answer: 'The powerhouse of the cell.', hints: ['Energy production'] },
-        { question: 'Photosynthesis', answer: 'Process by which plants use sunlight to create energy.', hints: ['Sunlight to sugar'] }
-      ]
-    };
+  private async loadGroupData(id: string) {
+    try {
+      const group = await this.flashcardService.getFlashCardGroupById(id);
 
-    this.groupForm.patchValue({
-      groupName: mockData.name,
-      groupDescription: mockData.description
-    });
-    this.flashcards.set(mockData.cards);
+      this.groupForm.patchValue({
+        groupName: group.name,
+        groupDescription: group.description
+      });
+
+      const items: FlashcardItem[] = group.flashcards.map(fc => ({
+        flashCardId: fc.flashCardId,
+        question: fc.question,
+        answer: fc.answer,
+        hints: fc.hints.map(h => ({
+          hintId: h.hintId,
+          hint: h.hint
+        }))
+      }));
+
+      this.flashcards.set(items);
+    } catch (error) {
+      console.error('Error loading group data:', error);
+    }
   }
 
   openAddFlashcardDialog() {
@@ -130,30 +142,30 @@ export class GroupDetail implements OnInit {
     this.flashcards.set(current);
   }
 
-  viewHints(hints: string[]) {
+  viewHints(hints: HintItem[]) {
     this.dialog.open(HintsDialog, {
       width: '400px',
-      data: hints
+      data: hints.map(h => h.hint) // HintsDialog likely expects string[]
     });
   }
 
   saveGroup() {
     if (this.groupForm.valid && this.flashcards().length > 0) {
       const payload: FlashCardGroup = {
-        flashCardGroupId: '', // Usually handled by DB or generated if needed
+        flashCardGroupId: this.groupId() || '',
         name: this.groupForm.value.groupName,
         description: this.groupForm.value.groupDescription,
         userId: this.currentUser.id,
         flashcards: this.flashcards().map(fc => ({
-          flashCardId: '', // Usually handled by DB
+          flashCardId: fc.flashCardId || '',
           question: fc.question,
           answer: fc.answer,
           userId: this.currentUser.id,
           createdAt: new Date(),
           updatedAt: new Date(),
           hints: fc.hints.map(h => ({
-            hintId: '', // Usually handled by DB
-            hint: h,
+            hintId: h.hintId || '',
+            hint: h.hint,
             userId: this.currentUser.id,
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -163,9 +175,11 @@ export class GroupDetail implements OnInit {
         updatedAt: new Date()
       };
 
-      console.log('Saving Group:', payload);
-
-      this.flashcardService.createFlashCardGroup(payload);
+      if (this.isEditMode()) {
+        this.flashcardService.editFlashCards(payload);
+      } else {
+        this.flashcardService.createFlashCardGroup(payload);
+      }
     }
   }
 
