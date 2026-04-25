@@ -38,8 +38,8 @@
           <div class="hint-item">
             <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
               <mat-label>Hint {{ i + 1 }}</mat-label>
-              <input matInput [value]="hint" (input)="updateHint(i, $event)" placeholder="Enter hint" maxlength="50">
-              <mat-hint align="end">{{ hint.length }}/50</mat-hint>
+              <input matInput [value]="hint.hint" (input)="updateHint(i, $event)" placeholder="Enter hint" maxlength="50">
+              <mat-hint align="end">{{ hint.hint.length }}/50</mat-hint>
               <button mat-icon-button matSuffix type="button" color="warn" (click)="removeHint(i)">
                 <mat-icon>delete</mat-icon>
               </button>

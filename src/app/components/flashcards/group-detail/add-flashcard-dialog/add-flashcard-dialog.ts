@@ -7,10 +7,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
+export interface HintItem {
+  hintId?: string;
+  hint: string;
+}
+
 export interface AddFlashcardData {
+  flashCardId?: string;
   question: string;
   answer: string;
-  hints: string[];
+  hints: HintItem[];
   isEdit?: boolean;
 }
 
@@ -31,7 +37,7 @@ export interface AddFlashcardData {
 })
 export class AddFlashcardDialog {
   flashcardForm: FormGroup;
-  hints = signal<string[]>([]);
+  hints = signal<HintItem[]>([]);
   maxHints = 3;
 
   constructor(
@@ -51,7 +57,7 @@ export class AddFlashcardDialog {
   isFormValid(): boolean {
     const q = this.flashcardForm.get('question')?.value;
     const a = this.flashcardForm.get('answer')?.value;
-    const allHintsFilled = this.hints().every(h => !!h.trim());
+    const allHintsFilled = this.hints().every(h => !!h.hint?.trim());
     return !!(q?.trim() && a?.trim()) && allHintsFilled;
   }
 
@@ -62,7 +68,7 @@ export class AddFlashcardDialog {
   addHint() {
     const currentHints = this.hints();
     if (currentHints.length < this.maxHints) {
-      this.hints.set([...currentHints, '']);
+      this.hints.set([...currentHints, { hint: '' }]);
     }
   }
 
@@ -74,16 +80,17 @@ export class AddFlashcardDialog {
 
   updateHint(index: number, event: Event) {
     const input = event.target as HTMLInputElement;
-    const currentHints = this.hints();
-    currentHints[index] = input.value;
-    this.hints.set([...currentHints]);
+    const currentHints = [...this.hints()];
+    currentHints[index] = { ...currentHints[index], hint: input.value };
+    this.hints.set(currentHints);
   }
 
   onSave() {
     if (this.flashcardForm.valid) {
       // Filter out empty hints
-      const filteredHints = this.hints().filter(h => h.trim() !== '');
+      const filteredHints = this.hints().filter(h => h.hint.trim() !== '');
       this.dialogRef.close({
+        flashCardId: this.data.flashCardId,
         ...this.flashcardForm.value,
         hints: filteredHints,
       });

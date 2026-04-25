@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,15 +6,27 @@ import { Flashcard } from './flashcard/flashcard';
 
 export type CardStatus = 'correct' | 'incorrect' | 'skipped' | 'none';
 
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-flashcards',
+  standalone: true,
   imports: [CommonModule, MatIconModule, MatButtonModule, Flashcard, RouterLink],
   templateUrl: './flashcards.html',
   styleUrl: './flashcards.scss',
 })
-export class Flashcards {
+export class Flashcards implements OnInit {
+  groupId = signal<string | null>(null);
+
+  constructor(private route: ActivatedRoute) { }
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.groupId.set(id);
+    }
+  }
+
   flashcardsMockData = [
     { id: '1', question: 'Mitochondria', answer: 'The powerhouse of the cell.', hints: ['Organelle responsible for energy production', 'Found in most eukaryotic cells'] },
     { id: '2', question: 'Photosynthesis', answer: 'Process by which plants use sunlight, water, and carbon dioxide to create oxygen and energy in the form of sugar.', hints: ['How plants make food', 'Occurs in the chloroplasts'] },

@@ -1,59 +1,36 @@
-# Cmod
+# ⚡ FlashCard App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.6.
+A premium, modern Flashcard application built with Angular and Supabase. This application allows users to create, manage, and study flashcard groups with a sleek, responsive interface.
 
-## Development server
+## 🚀 Features
 
-To start a local development server, run:
+- **Flashcard Management**: Create, edit, and delete flashcard groups.
+- **Interactive Studying**: Study flashcards with hints and performance tracking.
+- **Search & Filter**: Quickly find your flashcard groups.
+- **Secure Authentication**: Integrated with Supabase Auth (GitHub OAuth support).
+- **Premium Design**: Built with Angular Material and custom high-end SCSS themes.
 
-```bash
-ng serve
-```
+## 🛠️ Tech Stack
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Framework**: [Angular 21](https://angular.io/)
+- **Backend/Database**: [Supabase](https://supabase.com/)
+- **UI Components**: [Angular Material](https://material.angular.io/)
+- **Animations**: [Angular Animations](https://angular.io/guide/animations) & [ngx-spinner](https://www.npmjs.com/package/ngx-spinner)
+- **Styling**: Vanilla SCSS with a custom theme system
 
-## Code scaffolding
+## 📦 Installation
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run the development server:
+   ```bash
+   npm start
+   ```
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 📝 TODO:
+1. Add Security and validation to input fields
+2. Right or Wrong thumbs should be highlighted when answered by clicking on it
+3. Not fetching data from the database in the group detail page
