@@ -172,6 +172,7 @@ export class Flashcards implements OnInit {
     this.skippedCount.set(0);
     this.visibleHintIndices.set(new Set());
     this.currentIndex.set(0);
+    this.flashCards.set(this.flashcardService.shuffle(this.flashCards()));
   }
 
   private async loadFlashcards() {
@@ -180,7 +181,8 @@ export class Flashcards implements OnInit {
     try {
       const flashcardGroup = await this.flashcardService.getFlashCardGroupById(this.groupId()!);
       this.groupName.set(flashcardGroup.name);
-      this.flashCards.set(flashcardGroup.flashcards);
+      const shuffledCards = this.flashcardService.shuffle(flashcardGroup.flashcards);
+      this.flashCards.set(shuffledCards);
     } catch (error) {
       console.error('Error loading flashcards: ', error);
     } finally {
