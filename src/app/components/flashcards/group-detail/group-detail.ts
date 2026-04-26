@@ -60,13 +60,16 @@ export class GroupDetail implements OnInit {
   ) {
     this.groupForm = new FormGroup({
       groupName: new FormControl('', [
-        Validators.required, 
-        Validators.maxLength(50),
-        SecurityValidators.noMaliciousContent()
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(25),
+        SecurityValidators.noMaliciousContent(),
+        SecurityValidators.startsWithAlphanumeric()
       ]),
       groupDescription: new FormControl('', [
-        Validators.required, 
-        Validators.maxLength(200),
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(100),
         SecurityValidators.noMaliciousContent()
       ]),
     });

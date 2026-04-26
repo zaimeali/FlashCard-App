@@ -24,6 +24,17 @@ export class SecurityValidators {
       return hasTags || hasScriptPatterns || hasSqlPatterns ? { unsafe: true } : null;
     };
   }
+
+  /**
+   * Validates that the input starts with an alphanumeric character
+   */
+  static startsWithAlphanumeric(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) return null;
+      const startsSafe = /^[a-zA-Z0-9]/.test(control.value);
+      return startsSafe ? null : { startInvalid: true };
+    };
+  }
 }
 
 /**

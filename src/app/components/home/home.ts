@@ -93,8 +93,12 @@ export class Home implements OnInit {
     const name = this.editName();
     const desc = this.editDescription();
     
-    const nameSafe = !SecurityValidators.noMaliciousContent()(new FormControl(name));
-    const descSafe = !SecurityValidators.noMaliciousContent()(new FormControl(desc));
+    const nameSafe = !SecurityValidators.noMaliciousContent()(new FormControl(name)) && 
+                   !SecurityValidators.startsWithAlphanumeric()(new FormControl(name)) &&
+                   name.length >= 2 && name.length <= 25;
+                   
+    const descSafe = !SecurityValidators.noMaliciousContent()(new FormControl(desc)) && 
+                   desc.length >= 2 && desc.length <= 100;
     
     return nameSafe && descSafe;
   });
