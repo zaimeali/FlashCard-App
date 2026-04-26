@@ -138,14 +138,16 @@ export class Flashcards implements OnInit {
   nextCard(isHandled: boolean = false) {
     const currentId = this.activeCard.flashCardId;
     const currentStatus = this.getCardStatus(currentId);
+    const isAtEnd = this.currentIndex() >= this.totalCards() - 1;
 
     // Auto-skip logic: if we're moving next without an answer, mark as skipped
-    if (!isHandled && currentStatus === 'none') {
+    // Only apply if we are NOT at the end
+    if (!isHandled && currentStatus === 'none' && !isAtEnd) {
       this.updateCardStatus(currentId, 'skipped');
     }
 
-    this.visibleHintIndices.set(new Set());
-    if (this.currentIndex() < this.totalCards() - 1) {
+    if (!isAtEnd) {
+      this.visibleHintIndices.set(new Set());
       this.currentIndex.update(i => i + 1);
     }
   }
@@ -153,14 +155,16 @@ export class Flashcards implements OnInit {
   prevCard() {
     const currentId = this.activeCard.flashCardId;
     const currentStatus = this.getCardStatus(currentId);
+    const isAtStart = this.currentIndex() <= 0;
 
     // Auto-skip logic: if we're moving back without an answer, mark as skipped
-    if (currentStatus === 'none') {
+    // Only apply if we are NOT at the start
+    if (currentStatus === 'none' && !isAtStart) {
       this.updateCardStatus(currentId, 'skipped');
     }
 
-    this.visibleHintIndices.set(new Set());
-    if (this.currentIndex() > 0) {
+    if (!isAtStart) {
+      this.visibleHintIndices.set(new Set());
       this.currentIndex.update(i => i - 1);
     }
   }
