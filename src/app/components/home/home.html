@@ -25,7 +25,8 @@
             <mat-card class="fc-group-card" [class.is-editing]="editingGroupId() === group.flashCardGroupId" (click)="openGroup(group)" tabindex="0" role="button" @cardAnimation>
                 <div class="fc-card-header-row">
                     @if (editingGroupId() === group.flashCardGroupId) {
-                    <input class="fc-edit-input title" [(ngModel)]="editName" (click)="$event.stopPropagation()"
+                    <input class="fc-edit-input title" [class.invalid]="editName() && !isEditSafe()" 
+                        [ngModel]="editName()" (ngModelChange)="editName.set($event)" (click)="$event.stopPropagation()"
                         autoFocus>
                     } @else {
                     <mat-card-title class="fc-card-title" title="{{ group.name }}">{{ group.name }}</mat-card-title>
@@ -33,7 +34,7 @@
 
                     <div class="fc-card-actions">
                         @if (editingGroupId() === group.flashCardGroupId) {
-                        <button mat-icon-button class="fc-action-btn save"
+                        <button mat-icon-button class="fc-action-btn save" [disabled]="!isEditSafe()"
                             (click)="saveEdit(); $event.stopPropagation()" aria-label="Save">
                             <mat-icon>check</mat-icon>
                         </button>
@@ -63,7 +64,8 @@
                 </div>
                 <mat-card-content>
                     @if (editingGroupId() === group.flashCardGroupId) {
-                    <textarea class="fc-edit-input description" [(ngModel)]="editDescription"
+                    <textarea class="fc-edit-input description" [class.invalid]="editDescription() && !isEditSafe()" 
+                        [ngModel]="editDescription()" (ngModelChange)="editDescription.set($event)"
                         (click)="$event.stopPropagation()"></textarea>
                     } @else {
                     <p>{{ group.description }}</p>

@@ -13,6 +13,8 @@ import { FlashCardGroup } from '../../models/FlashCardGroup.model';
 import { FlashcardService } from '../../services/flashcards/flashcard-service';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { AlertService } from '../../services/alert/alert.service';
+import { SecurityValidators, sanitizeInput } from '../../utils/security/security-validators';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -86,6 +88,16 @@ export class Home implements OnInit {
   editingGroupId = signal<string | null>(null);
   editName = signal<string>('');
   editDescription = signal<string>('');
+
+  isEditSafe = computed(() => {
+    const name = this.editName();
+    const desc = this.editDescription();
+    
+    const nameSafe = !SecurityValidators.noMaliciousContent()(new FormControl(name));
+    const descSafe = !SecurityValidators.noMaliciousContent()(new FormControl(desc));
+    
+    return nameSafe && descSafe;
+  });
 
   // Search and Filtering
   searchTerm = signal<string>('');
@@ -197,8 +209,8 @@ export class Home implements OnInit {
 
     const updatedGroup = {
       ...groupToUpdate,
-      name: this.editName(),
-      description: this.editDescription()
+      name: sanitizeInput(this.editName()),
+      description: sanitizeInput(this.editDescription())
     };
 
     try {

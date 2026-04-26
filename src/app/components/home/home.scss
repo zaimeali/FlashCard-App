@@ -249,6 +249,14 @@
         height: 60px;
         margin-bottom: 0.5rem;
       }
+
+      &.invalid {
+        border-color: var(--fc-danger);
+        background: rgba(248, 113, 113, 0.05);
+        &:focus {
+          box-shadow: 0 0 0 2px rgba(248, 113, 113, 0.2);
+        }
+      }
     }
 
     .fc-card-actions {
