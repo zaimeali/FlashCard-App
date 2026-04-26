@@ -15,6 +15,7 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { AlertService } from '../../services/alert/alert.service';
 import { SecurityValidators, sanitizeInput } from '../../utils/security/security-validators';
 import { FormControl } from '@angular/forms';
+import { PullToRefreshDirective } from '../../utils/directives/pull-to-refresh.directive';
 
 @Component({
   selector: 'app-home',
@@ -28,7 +29,8 @@ import { FormControl } from '@angular/forms';
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    PullToRefreshDirective
   ],
   animations: [
     trigger('cardAnimation', [
@@ -88,6 +90,11 @@ export class Home implements OnInit {
   editingGroupId = signal<string | null>(null);
   editName = signal<string>('');
   editDescription = signal<string>('');
+
+  // Pull to Refresh state
+  pullProgress = signal<number>(0);
+  isRefreshing = signal<boolean>(false);
+  isRefreshSuccess = signal<boolean>(false);
 
   isEditSafe = computed(() => {
     const name = this.editName();
@@ -161,6 +168,39 @@ export class Home implements OnInit {
     } finally {
       this.isLoading.set(false);
       this.spinner.hide();
+    }
+  }
+
+  onPullProgress(progress: number) {
+    if (!this.isRefreshing()) {
+      this.pullProgress.set(progress);
+    }
+  }
+
+  async onRefresh() {
+    if (this.isRefreshing()) return;
+
+    this.isRefreshing.set(true);
+    this.pullProgress.set(1); // Keep it full during refresh
+
+    try {
+      const flashCardGroups = await this.flashcardService.getFlashCardGroups();
+      this.flashCardsGroup.set(flashCardGroups);
+      
+      // Success state
+      this.isRefreshSuccess.set(true);
+      this.isRefreshing.set(false);
+
+      // Reset success after a short delay
+      setTimeout(() => {
+        this.isRefreshSuccess.set(false);
+        this.pullProgress.set(0);
+      }, 800);
+
+    } catch (error) {
+      console.error('Refresh failed:', error);
+      this.isRefreshing.set(false);
+      this.pullProgress.set(0);
     }
   }
 

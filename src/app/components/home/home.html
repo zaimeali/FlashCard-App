@@ -17,7 +17,23 @@
                 </button>
             </div>
         </div>
-        <div class="fc-group-list">
+        <div class="fc-group-list" appPullToRefresh (pullProgress)="onPullProgress($event)" (refresh)="onRefresh()">
+            <div class="fc-refresh-indicator" 
+                 [class.is-refreshing]="isRefreshing()" 
+                 [class.is-success]="isRefreshSuccess()"
+                 [class.show]="pullProgress() > 0 || isRefreshing() || isRefreshSuccess()"
+                 [style.transform]="'translateY(' + (pullProgress() * 30) + 'px)'">
+                <div class="indicator-content">
+                    @if (isRefreshSuccess()) {
+                        <mat-icon class="success-icon">check_circle</mat-icon>
+                    } @else if (isRefreshing()) {
+                        <div class="premium-spinner"></div>
+                    } @else {
+                        <mat-icon class="pull-icon" [style.transform]="'rotate(' + (pullProgress() * 180) + 'deg)'">arrow_downward</mat-icon>
+                    }
+                </div>
+            </div>
+
             <ngx-spinner [fullScreen]="false" type="fire" size="medium" color="#ff5722"
                 bdColor="rgba(0, 0, 0, 0.0)"></ngx-spinner>
             @if (visibleGroups().length > 0) {
