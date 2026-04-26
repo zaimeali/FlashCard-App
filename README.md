@@ -29,6 +29,3 @@ A premium, modern Flashcard application built with Angular and Supabase. This ap
    ```bash
    npm start
    ```
-
-## 📝 TODO:
-1. Add gmail auth

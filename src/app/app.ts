@@ -2,12 +2,14 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { Navbar } from './components/navbar/navbar';
 import { AuthService } from './services/auth/auth.service';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    Navbar
+    Navbar,
+    NgxSpinnerModule
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',

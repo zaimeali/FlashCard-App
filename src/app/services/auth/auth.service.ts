@@ -3,6 +3,7 @@ import { SupabaseService } from '../supabase/supabase.service';
 import { Router } from '@angular/router';
 import { Routes } from '../../utils/auth-guard/constants/routes';
 import { Session, User } from '@supabase/supabase-js';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +11,7 @@ import { Session, User } from '@supabase/supabase-js';
 export class AuthService {
 
   private static readonly GITHUB_PROVIDER = 'github';
+  private static readonly GOOGLE_PROVIDER = 'google';
 
   // State Management - Signals
   private userSignal = signal<User | null>(null);
@@ -26,7 +28,8 @@ export class AuthService {
 
   constructor(
     private supabaseService: SupabaseService,
-    private router: Router
+    private router: Router,
+    private spinner: NgxSpinnerService
   ) {
     this.initializeAuthState();
 
@@ -39,21 +42,40 @@ export class AuthService {
 
   private async getSupabaseSession() {
     const { data: { session } } = await this.supabaseService.client.auth.getSession();
-    this.updateAuthState(session);
+    
+    if (session) {
+      // Verify user existence with server (important if account was deleted elsewhere)
+      const { data: { user }, error } = await this.supabaseService.client.auth.getUser();
+      if (error || !user) {
+        console.warn('[AuthService] Session exists but user verification failed. Logging out.');
+        this.loadingSignal.set(false); // Fix deadlock: allow guards to proceed before logout navigation
+        this.spinner.hide();
+        await this.logout();
+        return;
+      }
+    }
 
-    // Listen for auth state changes and store unsubscribe function
+    this.updateAuthState(session);
+  }
+
+  private setupAuthStateListener() {
     this.supabaseService.client.auth.onAuthStateChange((event, session) => {
+      console.log('[AuthService] Auth state changed:', event, !!session);
       this.updateAuthState(session);
     });
   }
 
   private async initializeAuthState() {
     try {
+      this.loadingSignal.set(true);
+      this.spinner.show();
+      this.setupAuthStateListener();
       await this.getSupabaseSession();
     } catch (error) {
       console.error("Error initializing auth state: ", error);
     } finally {
       this.loadingSignal.set(false);
+      this.spinner.hide();
     }
   }
 
@@ -63,11 +85,20 @@ export class AuthService {
   }
 
   public async loginWithGithub() {
+    return this.loginWithOAuth(AuthService.GITHUB_PROVIDER);
+  }
+
+  public async loginWithGoogle() {
+    return this.loginWithOAuth(AuthService.GOOGLE_PROVIDER);
+  }
+
+  private async loginWithOAuth(provider: string) {
     this.loadingSignal.set(true);
+    this.spinner.show();
 
     try {
       const { data, error } = await this.supabaseService.client.auth.signInWithOAuth({
-        provider: AuthService.GITHUB_PROVIDER,
+        provider: provider as any,
         options: {
           redirectTo: `${window.location.origin}`
         }
@@ -75,18 +106,19 @@ export class AuthService {
 
       if (error) throw error;
 
-      this.getSupabaseSession();
-
-      this.router.navigate(['/']);
+      // Note: We don't call getSupabaseSession() or navigate directly here.
+      // signInWithOAuth triggers a browser redirect. The auth state will be
+      // initialized when the user is redirected back to the app.
 
       return { success: true };
 
     } catch (error) {
-      alert("Error Logging In");
+      alert(`Error Logging In with ${provider}`);
       console.error("Login Error: ", error);
       return { success: false, error: error };
     } finally {
       this.loadingSignal.set(false);
+      this.spinner.hide();
     }
   }
 
@@ -115,13 +147,30 @@ export class AuthService {
   public async deleteAccount() {
     console.log('[AuthService] Delete Account started');
     try {
-      const { data: { user }, error: userError } = await this.supabaseService.client.auth.getUser();
+      this.loadingSignal.set(true);
+      this.spinner.show();
+      // Use the local signal first to avoid unnecessary network calls if the session is already known
+      let user = this.userSignal();
 
-      if (userError || !user) throw new Error('No authenticated user found');
+      if (!user) {
+        const { data: { user: freshUser }, error: userError } = await this.supabaseService.client.auth.getUser();
+        if (userError || !freshUser) throw new Error('No authenticated user found');
+        user = freshUser;
+      }
+
+      const { error: deleteFlashcardDataError } = await this.supabaseService.client.rpc('delete_all_user_flashcard_data', {
+        p_user_id: user.id
+      });
+
+      if (deleteFlashcardDataError) throw deleteFlashcardDataError;
 
       const { error: deleteError } = await this.supabaseService.client.rpc('delete_self');
 
       if (deleteError) throw deleteError;
+
+      // After deleting the user record, we MUST sign out to properly clear the local session/storage
+      const { error: signOutError } = await this.supabaseService.client.auth.signOut();
+      if (signOutError) throw signOutError;
 
       this.updateAuthState(null);
 
@@ -132,6 +181,9 @@ export class AuthService {
       alert("Error Deleting Account");
       console.error("Delete Account Error: ", error);
       return { success: false, error: error };
+    } finally {
+      this.loadingSignal.set(false);
+      this.spinner.hide();
     }
   }
 }
