@@ -165,6 +165,15 @@ export class Flashcards implements OnInit {
     }
   }
 
+  resetCardStatus() {
+    this.cardStatuses.set({});
+    this.correctCount.set(0);
+    this.incorrectCount.set(0);
+    this.skippedCount.set(0);
+    this.visibleHintIndices.set(new Set());
+    this.currentIndex.set(0);
+  }
+
   private async loadFlashcards() {
     this.isLoading.set(true);
     this.spinner.show();

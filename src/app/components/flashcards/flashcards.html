@@ -8,9 +8,14 @@
       <h2>{{ groupName() }}</h2>
       <p>Total Flashcards: {{ totalCards() }}</p>
     </div>
-    <a mat-icon-button [routerLink]="['/flashcards/edit', groupId()]" class="fc-edit-group-btn" title="Edit Group">
-      <mat-icon>edit</mat-icon>
-    </a>
+    <div class="fc-title-actions">
+      <button mat-icon-button class="fc-reset-btn" title="Reset" (click)="resetCardStatus()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+      <a mat-icon-button [routerLink]="['/flashcards/edit', groupId()]" class="fc-edit-group-btn" title="Edit Group">
+        <mat-icon>edit</mat-icon>
+      </a>
+    </div>
     }
   </div>
   <div class="fc-header-divider"></div>
@@ -50,7 +55,7 @@
       @if (activeCard) {
       <div class="fc-hints-header">
         <h3>Hints</h3>
-        <button mat-flat-button color="primary" (click)="toggleHints()">
+        <button mat-flat-button color="primary" (click)="toggleHints()" [disabled]="activeCard.hints.length === 0">
           <mat-icon>{{ allHintsVisible() ? 'lightbulb_outline' : 'lightbulb' }}</mat-icon>
           {{ allHintsVisible() ? 'Hide hints' : 'Show hints' }}
         </button>

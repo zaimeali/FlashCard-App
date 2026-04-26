@@ -127,7 +127,7 @@ export class FlashcardService {
       console.log('Flashcard group updated successfully: ', data);
       this.alertService.success('Updated!', 'Flashcard group updated successfully');
 
-      this.router.navigate([Routes.HOME]);
+      this.router.navigate(['/flashcards', flashCardGroup.flashCardGroupId]);
     } catch (error) {
       console.error('Error updating flashcards: ', error);
       this.alertService.error('Error', 'Failed to update flashcards. Please try again.');
