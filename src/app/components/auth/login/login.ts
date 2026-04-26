@@ -38,6 +38,12 @@ export class Login {
   public async loginWithGithub() {
     const response = await this.authService.loginWithGithub();
 
-    console.log("Login Response: ", response);
+    console.log("Github Login Response: ", response);
+  }
+
+  public async loginWithGoogle() {
+    const response = await this.authService.loginWithGoogle();
+
+    console.log("Google Login Response: ", response);
   }
 }

@@ -10,6 +10,7 @@ import { Session, User } from '@supabase/supabase-js';
 export class AuthService {
 
   private static readonly GITHUB_PROVIDER = 'github';
+  private static readonly GOOGLE_PROVIDER = 'google';
 
   // State Management - Signals
   private userSignal = signal<User | null>(null);
@@ -63,11 +64,19 @@ export class AuthService {
   }
 
   public async loginWithGithub() {
+    return this.loginWithOAuth(AuthService.GITHUB_PROVIDER);
+  }
+
+  public async loginWithGoogle() {
+    return this.loginWithOAuth(AuthService.GOOGLE_PROVIDER);
+  }
+
+  private async loginWithOAuth(provider: string) {
     this.loadingSignal.set(true);
 
     try {
       const { data, error } = await this.supabaseService.client.auth.signInWithOAuth({
-        provider: AuthService.GITHUB_PROVIDER,
+        provider: provider as any,
         options: {
           redirectTo: `${window.location.origin}`
         }
@@ -82,7 +91,7 @@ export class AuthService {
       return { success: true };
 
     } catch (error) {
-      alert("Error Logging In");
+      alert(`Error Logging In with ${provider}`);
       console.error("Login Error: ", error);
       return { success: false, error: error };
     } finally {
