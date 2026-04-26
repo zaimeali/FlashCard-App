@@ -70,12 +70,16 @@
                 <ng-container matColumnDef="actions">
                   <th mat-header-cell *matHeaderCellDef>Actions</th>
                   <td mat-cell *matCellDef="let card; let i = index">
-                    <button mat-icon-button color="primary" (click)="editFlashcard(i)"><mat-icon>edit</mat-icon></button>
-                    <button mat-icon-button color="warn" (click)="deleteFlashcard(i)"><mat-icon>delete</mat-icon></button>
+                    <button mat-icon-button color="primary" class="edit-btn" (click)="editFlashcard(i)">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" class="delete-btn" (click)="deleteFlashcard(i)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
                   </td>
                 </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
               </table>
             </div>
