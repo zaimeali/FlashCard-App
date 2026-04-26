@@ -41,15 +41,18 @@ export class AuthService {
   private async getSupabaseSession() {
     const { data: { session } } = await this.supabaseService.client.auth.getSession();
     this.updateAuthState(session);
+  }
 
-    // Listen for auth state changes and store unsubscribe function
+  private setupAuthStateListener() {
     this.supabaseService.client.auth.onAuthStateChange((event, session) => {
+      console.log('[AuthService] Auth state changed:', event, !!session);
       this.updateAuthState(session);
     });
   }
 
   private async initializeAuthState() {
     try {
+      this.setupAuthStateListener();
       await this.getSupabaseSession();
     } catch (error) {
       console.error("Error initializing auth state: ", error);
@@ -84,9 +87,9 @@ export class AuthService {
 
       if (error) throw error;
 
-      this.getSupabaseSession();
-
-      this.router.navigate(['/']);
+      // Note: We don't call getSupabaseSession() or navigate directly here.
+      // signInWithOAuth triggers a browser redirect. The auth state will be
+      // initialized when the user is redirected back to the app.
 
       return { success: true };
 
@@ -124,13 +127,28 @@ export class AuthService {
   public async deleteAccount() {
     console.log('[AuthService] Delete Account started');
     try {
-      const { data: { user }, error: userError } = await this.supabaseService.client.auth.getUser();
+      // Use the local signal first to avoid unnecessary network calls if the session is already known
+      let user = this.userSignal();
 
-      if (userError || !user) throw new Error('No authenticated user found');
+      if (!user) {
+        const { data: { user: freshUser }, error: userError } = await this.supabaseService.client.auth.getUser();
+        if (userError || !freshUser) throw new Error('No authenticated user found');
+        user = freshUser;
+      }
+
+      const { error: deleteFlashcardDataError } = await this.supabaseService.client.rpc('delete_all_user_flashcard_data', {
+        p_user_id: user.id
+      });
+
+      if (deleteFlashcardDataError) throw deleteFlashcardDataError;
 
       const { error: deleteError } = await this.supabaseService.client.rpc('delete_self');
 
       if (deleteError) throw deleteError;
+
+      // After deleting the user record, we MUST sign out to properly clear the local session/storage
+      const { error: signOutError } = await this.supabaseService.client.auth.signOut();
+      if (signOutError) throw signOutError;
 
       this.updateAuthState(null);
 
