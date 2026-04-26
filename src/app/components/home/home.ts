@@ -92,7 +92,7 @@ export class Home implements OnInit {
 
   totalCards = computed(() => {
     if (this.isLoading()) return 0;
-    return this.flashCardsGroup().reduce((acc, group) => acc + (group.flashcards?.length || 0), 0);
+    return this.flashCardsGroup().length;
   });
 
   filteredGroups = computed(() => {

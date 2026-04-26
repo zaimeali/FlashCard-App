@@ -10,6 +10,9 @@
         @if (flashcardForm.get('question')?.hasError('required')) {
           <mat-error>Question is required</mat-error>
         }
+        @if (flashcardForm.get('question')?.hasError('unsafe')) {
+          <mat-error>Invalid characters or SQL detected</mat-error>
+        }
       </mat-form-field>
     </div>
 
@@ -20,6 +23,9 @@
         <mat-hint align="end">{{ flashcardForm.get('answer')?.value?.length || 0 }}/200</mat-hint>
         @if (flashcardForm.get('answer')?.hasError('required')) {
           <mat-error>Answer is required</mat-error>
+        }
+        @if (flashcardForm.get('answer')?.hasError('unsafe')) {
+          <mat-error>Invalid characters or SQL detected</mat-error>
         }
       </mat-form-field>
     </div>

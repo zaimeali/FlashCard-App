@@ -31,6 +31,4 @@ A premium, modern Flashcard application built with Angular and Supabase. This ap
    ```
 
 ## 📝 TODO:
-1. Add Security and validation to input fields
-2. Shuffle everytime
-3. Add gmail auth
+1. Add gmail auth

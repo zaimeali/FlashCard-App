@@ -15,6 +15,7 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { FlashCardGroup } from '../../../models/FlashCardGroup.model';
 import { User } from '@supabase/supabase-js';
 import { HintItem } from './add-flashcard-dialog/add-flashcard-dialog';
+import { SecurityValidators, sanitizeInput } from '../../../utils/security/security-validators';
 
 export interface FlashcardItem {
   flashCardId?: string;
@@ -58,8 +59,16 @@ export class GroupDetail implements OnInit {
     private authService: AuthService
   ) {
     this.groupForm = new FormGroup({
-      groupName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
-      groupDescription: new FormControl('', [Validators.required, Validators.maxLength(200)]),
+      groupName: new FormControl('', [
+        Validators.required, 
+        Validators.maxLength(50),
+        SecurityValidators.noMaliciousContent()
+      ]),
+      groupDescription: new FormControl('', [
+        Validators.required, 
+        Validators.maxLength(200),
+        SecurityValidators.noMaliciousContent()
+      ]),
     });
   }
 
@@ -151,19 +160,19 @@ export class GroupDetail implements OnInit {
     if (this.groupForm.valid && this.flashcards().length > 0) {
       const payload: FlashCardGroup = {
         flashCardGroupId: this.groupId() || '',
-        name: this.groupForm.value.groupName,
-        description: this.groupForm.value.groupDescription,
+        name: sanitizeInput(this.groupForm.value.groupName),
+        description: sanitizeInput(this.groupForm.value.groupDescription),
         userId: this.currentUser.id,
         flashcards: this.flashcards().map(fc => ({
           flashCardId: fc.flashCardId || '',
-          question: fc.question,
-          answer: fc.answer,
+          question: sanitizeInput(fc.question),
+          answer: sanitizeInput(fc.answer),
           userId: this.currentUser.id,
           createdAt: new Date(),
           updatedAt: new Date(),
           hints: fc.hints.map(h => ({
             hintId: h.hintId || '',
-            hint: h.hint,
+            hint: sanitizeInput(h.hint),
             userId: this.currentUser.id,
             createdAt: new Date(),
             updatedAt: new Date(),

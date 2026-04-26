@@ -18,6 +18,9 @@
             @if (groupForm.get('groupName')?.hasError('required')) {
               <mat-error>Required</mat-error>
             }
+            @if (groupForm.get('groupName')?.hasError('unsafe')) {
+              <mat-error>Invalid characters or SQL detected</mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-width">
@@ -27,6 +30,9 @@
             <mat-hint align="end">{{ groupForm.get('groupDescription')?.value?.length || 0 }}/200</mat-hint>
             @if (groupForm.get('groupDescription')?.hasError('required')) {
               <mat-error>Required</mat-error>
+            }
+            @if (groupForm.get('groupDescription')?.hasError('unsafe')) {
+              <mat-error>Invalid characters or SQL detected</mat-error>
             }
           </mat-form-field>
         </form>
