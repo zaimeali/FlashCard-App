@@ -17,7 +17,7 @@
   }
 
   &.flipped {
-    transform: rotateY(180deg);
+    // Transform is now handled via [style.transform] in HTML for interactive dragging support
   }
 
   // Skipped state styling

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -39,8 +39,19 @@ export class Flashcard {
   isFlipped = false;
   isTouchDevice = typeof window !== 'undefined' && navigator.maxTouchPoints > 0;
 
+  // Live drag state
+  dragOffset = signal(0);
+  isDragging = signal(false);
+
   private touchStartPoint: TouchPoint | null = null;
   private touchMoved = false;
+
+  getTransform() {
+    const offset = this.dragOffset();
+    const rotation = this.isFlipped ? 180 : 0;
+    const tilt = offset * 0.05; // Slightly more tilt
+    return `translateX(${offset}px) rotate(${tilt}deg) rotateY(${rotation}deg)`;
+  }
 
   flipCard() {
     this.isFlipped = !this.isFlipped;
@@ -65,21 +76,52 @@ export class Flashcard {
       const touch = event.touches[0];
       this.touchStartPoint = { x: touch.clientX, y: touch.clientY };
       this.touchMoved = false;
+      this.dragOffset.set(0);
+      this.isDragging.set(true);
     }
   }
 
   onTouchMove(event: TouchEvent) {
-    this.touchMoved = true;
+    if (!this.touchStartPoint) return;
+    
+    const touch = event.touches[0];
+    const dx = touch.clientX - this.touchStartPoint.x;
+    const dy = touch.clientY - this.touchStartPoint.y;
+
+    // Only drag horizontally if dx > dy
+    if (Math.abs(dx) > Math.abs(dy)) {
+      this.touchMoved = true;
+      this.dragOffset.set(dx);
+      // Prevent scrolling while dragging horizontally
+      if (Math.abs(dx) > 10) {
+        // Many browsers require { passive: false } for preventDefault to work
+        // but Angular 16+ template bindings are often passive by default on some platforms
+        // If this doesn't work, we'll move to Renderer2 or HostListener
+        try {
+          if (event.cancelable) {
+            event.preventDefault();
+          }
+        } catch (e) {}
+      }
+    }
   }
 
   onTouchEnd(event: TouchEvent) {
+    this.isDragging.set(false);
+
     if (!this.touchStartPoint || !this.touchMoved) {
       this.touchStartPoint = null;
+      this.dragOffset.set(0);
       return;
     }
+
     const touch = event.changedTouches[0];
     const dx = touch.clientX - this.touchStartPoint.x;
     const dy = touch.clientY - this.touchStartPoint.y;
+
+    // Reset drag offset visually (transition will handle smooth snap)
+    this.dragOffset.set(0);
+
     // Only consider horizontal swipes
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
       if (dx < 0) {
@@ -88,6 +130,7 @@ export class Flashcard {
         this.swipeRight.emit();
       }
     }
+    
     this.touchStartPoint = null;
     this.touchMoved = false;
   }

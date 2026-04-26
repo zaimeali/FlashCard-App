@@ -1,5 +1,7 @@
 <div class="fc-card-frame"
-  [ngClass]="{'flipped': isFlipped, 'skipped': status === 'skipped' && !isCurrentSkipped}"
+  [ngClass]="{'flipped': isFlipped, 'skipped': status === 'skipped' && !isCurrentSkipped, 'dragging': isDragging()}"
+  [style.transform]="getTransform()"
+  [style.transition]="isDragging() ? 'none' : ''"
   (click)="active ? flipCard() : null"
   (touchstart)="active ? onTouchStart($event) : null"
   (touchmove)="active ? onTouchMove($event) : null"
