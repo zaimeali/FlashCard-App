@@ -3,6 +3,7 @@ import { SupabaseService } from '../supabase/supabase.service';
 import { Router } from '@angular/router';
 import { Routes } from '../../utils/auth-guard/constants/routes';
 import { Session, User } from '@supabase/supabase-js';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +28,8 @@ export class AuthService {
 
   constructor(
     private supabaseService: SupabaseService,
-    private router: Router
+    private router: Router,
+    private spinner: NgxSpinnerService
   ) {
     this.initializeAuthState();
 
@@ -40,6 +42,19 @@ export class AuthService {
 
   private async getSupabaseSession() {
     const { data: { session } } = await this.supabaseService.client.auth.getSession();
+    
+    if (session) {
+      // Verify user existence with server (important if account was deleted elsewhere)
+      const { data: { user }, error } = await this.supabaseService.client.auth.getUser();
+      if (error || !user) {
+        console.warn('[AuthService] Session exists but user verification failed. Logging out.');
+        this.loadingSignal.set(false); // Fix deadlock: allow guards to proceed before logout navigation
+        this.spinner.hide();
+        await this.logout();
+        return;
+      }
+    }
+
     this.updateAuthState(session);
   }
 
@@ -52,12 +67,15 @@ export class AuthService {
 
   private async initializeAuthState() {
     try {
+      this.loadingSignal.set(true);
+      this.spinner.show();
       this.setupAuthStateListener();
       await this.getSupabaseSession();
     } catch (error) {
       console.error("Error initializing auth state: ", error);
     } finally {
       this.loadingSignal.set(false);
+      this.spinner.hide();
     }
   }
 
@@ -76,6 +94,7 @@ export class AuthService {
 
   private async loginWithOAuth(provider: string) {
     this.loadingSignal.set(true);
+    this.spinner.show();
 
     try {
       const { data, error } = await this.supabaseService.client.auth.signInWithOAuth({
@@ -99,6 +118,7 @@ export class AuthService {
       return { success: false, error: error };
     } finally {
       this.loadingSignal.set(false);
+      this.spinner.hide();
     }
   }
 
@@ -127,6 +147,8 @@ export class AuthService {
   public async deleteAccount() {
     console.log('[AuthService] Delete Account started');
     try {
+      this.loadingSignal.set(true);
+      this.spinner.show();
       // Use the local signal first to avoid unnecessary network calls if the session is already known
       let user = this.userSignal();
 
@@ -159,6 +181,9 @@ export class AuthService {
       alert("Error Deleting Account");
       console.error("Delete Account Error: ", error);
       return { success: false, error: error };
+    } finally {
+      this.loadingSignal.set(false);
+      this.spinner.hide();
     }
   }
 }

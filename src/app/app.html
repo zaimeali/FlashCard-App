@@ -2,9 +2,10 @@
     <app-navbar />
 }
 @if (isLoading()) {
-    <div class="loading-container">
-        <div class="spinner"></div>
-    </div>
+    <ngx-spinner [fullScreen]="true" type="fire" size="medium" color="#ff5722"
+        bdColor="rgba(0, 0, 0, 0.8)">
+        <p style="color: white; margin-top: 50px;">Verifying Session...</p>
+    </ngx-spinner>
 } @else {
     <router-outlet />
 }
