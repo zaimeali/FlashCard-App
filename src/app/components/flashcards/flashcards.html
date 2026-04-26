@@ -5,7 +5,7 @@
     </button>
     <div class="fc-title-content">
       <h2>Biology Flashcards</h2>
-      <p>Total Flashcards: {{ totalCards }}</p>
+      <p>Total Flashcards: {{ totalCards() }}</p>
     </div>
     <a mat-icon-button [routerLink]="['/flashcards/edit', groupId()]" class="fc-edit-group-btn" title="Edit Group">
       <mat-icon>edit</mat-icon>
@@ -14,55 +14,48 @@
   <div class="fc-header-divider"></div>
 
   <div class="fc-main-content">
-    
+
     <div class="fc-carousel-wrapper">
-      <button class="fc-nav-arrow arrow-left" mat-icon-button color="primary" [disabled]="currentIndex() === 0" (click)="prevCard()">
+      <button class="fc-nav-arrow arrow-left" mat-icon-button color="primary" [disabled]="currentIndex() === 0"
+        (click)="prevCard()">
         <mat-icon>arrow_back</mat-icon>
       </button>
 
       <div class="fc-carousel">
-        @for (card of flashcardsMockData; track card.id; let i = $index) {
-          <app-flashcard
-            [cardData]="card"
-            [active]="i === currentIndex()"
-            [status]="getCardStatus(card.id)"
-            [isCurrentSkipped]="getCardStatus(card.id) === 'skipped' && i === currentIndex()"
-            class="carousel-card"
-            [ngClass]="{
+        @for (card of flashCards(); track card.flashCardId; let i = $index) {
+        <app-flashcard [cardData]="card" [active]="i === currentIndex()" [status]="getCardStatus(card.flashCardId)"
+          [isCurrentSkipped]="getCardStatus(card.flashCardId) === 'skipped' && i === currentIndex()"
+          class="carousel-card" [ngClass]="{
               'active': i === currentIndex(),
               'prev': i === currentIndex() - 1,
               'next': i === currentIndex() + 1,
               'hidden-left': i < currentIndex() - 1,
               'hidden-right': i > currentIndex() + 1
-            }"
-            (correct)="handleCorrect()"
-            (incorrect)="handleIncorrect()"
-            (skip)="handleSkip()"
-            (swipeLeft)="nextCard()"
-            (swipeRight)="prevCard()"
-          ></app-flashcard>
+            }" (correct)="handleCorrect()" (incorrect)="handleIncorrect()" (skip)="handleSkip()"
+          (swipeLeft)="nextCard()" (swipeRight)="prevCard()"></app-flashcard>
         }
       </div>
 
-      <button class="fc-nav-arrow arrow-right" mat-icon-button color="primary" [disabled]="currentIndex() === totalCards - 1" (click)="nextCard(false)">
+      <button class="fc-nav-arrow arrow-right" mat-icon-button color="primary"
+        [disabled]="currentIndex() === totalCards() - 1" (click)="nextCard(false)">
         <mat-icon>arrow_forward</mat-icon>
       </button>
     </div>
 
     <div class="fc-hints-container">
       @if (activeCard) {
-        <div class="fc-hints-header">
-          <h3>Hints</h3>
-          <button mat-flat-button color="primary" (click)="toggleHints()">
-            <mat-icon>{{ allHintsVisible() ? 'lightbulb_outline' : 'lightbulb' }}</mat-icon>
-            {{ allHintsVisible() ? 'Hide hints' : 'Show hints' }}
-          </button>
-        </div>
-        <ul class="fc-hints-list">
-          @for (hint of activeCard.hints; track hint; let idx = $index) {
-            <li [ngClass]="{'show': isHintVisible(idx)}" (click)="hideSpecificHint(idx)">{{ hint }}</li>
-          }
-        </ul>
+      <div class="fc-hints-header">
+        <h3>Hints</h3>
+        <button mat-flat-button color="primary" (click)="toggleHints()">
+          <mat-icon>{{ allHintsVisible() ? 'lightbulb_outline' : 'lightbulb' }}</mat-icon>
+          {{ allHintsVisible() ? 'Hide hints' : 'Show hints' }}
+        </button>
+      </div>
+      <ul class="fc-hints-list">
+        @for (hint of activeCard.hints; track hint; let idx = $index) {
+        <li [ngClass]="{'show': isHintVisible(idx)}" (click)="hideSpecificHint(idx)">{{ hint.hint }}</li>
+        }
+      </ul>
       }
     </div>
   </div>

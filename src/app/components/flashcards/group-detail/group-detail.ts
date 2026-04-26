@@ -9,7 +9,6 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AddFlashcardDialog } from './add-flashcard-dialog/add-flashcard-dialog';
 import { HintsDialog } from './hints-dialog/hints-dialog';
-
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FlashcardService } from '../../../services/flashcards/flashcard-service';
 import { AuthService } from '../../../services/auth/auth.service';
@@ -69,7 +68,6 @@ export class GroupDetail implements OnInit {
 
     if (!this.currentUser) {
       alert('You must be logged in to access this page');
-      // Potentially redirect here if necessary
     }
 
     const id = this.route.snapshot.paramMap.get('id');
