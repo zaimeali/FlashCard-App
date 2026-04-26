@@ -21,13 +21,16 @@
     <!-- Actions mounted on BOTH SIDES natively based on constraints -->
     @if (active) {
       <div class="fc-actions">
-        <button mat-icon-button (click)="onAction('incorrect', $event)" class="action-btn incorrect" aria-label="Incorrect">
+        <button mat-icon-button (click)="onAction('incorrect', $event)" 
+          [class.selected]="status === 'incorrect'" class="action-btn incorrect" aria-label="Incorrect">
           <mat-icon>thumb_down</mat-icon>
         </button>
-        <button mat-icon-button (click)="onAction('skip', $event)" class="action-btn skip" aria-label="Skip">
+        <button mat-icon-button (click)="onAction('skip', $event)" 
+          [class.selected]="status === 'skipped'" class="action-btn skip" aria-label="Skip">
           <mat-icon>replay</mat-icon>
         </button>
-        <button mat-icon-button (click)="onAction('correct', $event)" class="action-btn correct" aria-label="Correct">
+        <button mat-icon-button (click)="onAction('correct', $event)" 
+          [class.selected]="status === 'correct'" class="action-btn correct" aria-label="Correct">
           <mat-icon>thumb_up</mat-icon>
         </button>
       </div>
@@ -47,13 +50,16 @@
     <!-- Actions mounted on BOTH SIDES natively based on constraints -->
     @if (active) {
       <div class="fc-actions">
-        <button mat-icon-button (click)="onAction('incorrect', $event)" class="action-btn incorrect" aria-label="Incorrect">
+        <button mat-icon-button (click)="onAction('incorrect', $event)" 
+          [class.selected]="status === 'incorrect'" class="action-btn incorrect" aria-label="Incorrect">
           <mat-icon>thumb_down</mat-icon>
         </button>
-        <button mat-icon-button (click)="onAction('skip', $event)" class="action-btn skip" aria-label="Skip">
+        <button mat-icon-button (click)="onAction('skip', $event)" 
+          [class.selected]="status === 'skipped'" class="action-btn skip" aria-label="Skip">
           <mat-icon>replay</mat-icon>
         </button>
-        <button mat-icon-button (click)="onAction('correct', $event)" class="action-btn correct" aria-label="Correct">
+        <button mat-icon-button (click)="onAction('correct', $event)" 
+          [class.selected]="status === 'correct'" class="action-btn correct" aria-label="Correct">
           <mat-icon>thumb_up</mat-icon>
         </button>
       </div>

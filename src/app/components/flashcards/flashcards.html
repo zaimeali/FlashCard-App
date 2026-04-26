@@ -3,18 +3,22 @@
     <button mat-icon-button routerLink="/" class="fc-back-btn" title="Back to Home">
       <mat-icon>arrow_back</mat-icon>
     </button>
+    @if (!isLoading() && flashCards().length > 0) {
     <div class="fc-title-content">
-      <h2>Biology Flashcards</h2>
+      <h2>{{ groupName() }}</h2>
       <p>Total Flashcards: {{ totalCards() }}</p>
     </div>
     <a mat-icon-button [routerLink]="['/flashcards/edit', groupId()]" class="fc-edit-group-btn" title="Edit Group">
       <mat-icon>edit</mat-icon>
     </a>
+    }
   </div>
   <div class="fc-header-divider"></div>
 
   <div class="fc-main-content">
-
+    <ngx-spinner [fullScreen]="false" type="fire" size="medium" color="#ff5722"
+      bdColor="rgba(0, 0, 0, 0.0)"></ngx-spinner>
+    @if (!isLoading()) {
     <div class="fc-carousel-wrapper">
       <button class="fc-nav-arrow arrow-left" mat-icon-button color="primary" [disabled]="currentIndex() === 0"
         (click)="prevCard()">
@@ -58,6 +62,7 @@
       </ul>
       }
     </div>
+    }
   </div>
 
   <!-- Redesigned Info Bar with stats chips -->
