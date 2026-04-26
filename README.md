@@ -33,4 +33,6 @@ A premium, modern Flashcard application built with Angular and Supabase. This ap
 ## 📝 TODO:
 1. Add Security and validation to input fields
 2. Right or Wrong thumbs should be highlighted when answered by clicking on it
-3. logout session
+3. Reset button to restart
+4. Shuffle everytime
+5. Add gmail auth

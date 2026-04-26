@@ -2,6 +2,7 @@ import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { Flashcard } from './flashcard/flashcard';
 
 export type CardStatus = 'correct' | 'incorrect' | 'skipped' | 'none';
@@ -13,7 +14,7 @@ import { FlashCard } from '../../models/FlashCard.model';
 @Component({
   selector: 'app-flashcards',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, Flashcard, RouterLink],
+  imports: [CommonModule, MatIconModule, MatButtonModule, Flashcard, RouterLink, NgxSpinnerModule],
   templateUrl: './flashcards.html',
   styleUrl: './flashcards.scss',
 })
@@ -22,7 +23,8 @@ export class Flashcards implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private flashcardService: FlashcardService
+    private flashcardService: FlashcardService,
+    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
@@ -33,7 +35,9 @@ export class Flashcards implements OnInit {
     }
   }
 
+  groupName = signal<string>('');
   flashCards = signal<FlashCard[]>([]);
+  isLoading = signal(false);
 
   currentIndex = signal(0);
 
@@ -147,6 +151,14 @@ export class Flashcards implements OnInit {
   }
 
   prevCard() {
+    const currentId = this.activeCard.flashCardId;
+    const currentStatus = this.getCardStatus(currentId);
+
+    // Auto-skip logic: if we're moving back without an answer, mark as skipped
+    if (currentStatus === 'none') {
+      this.updateCardStatus(currentId, 'skipped');
+    }
+
     this.visibleHintIndices.set(new Set());
     if (this.currentIndex() > 0) {
       this.currentIndex.update(i => i - 1);
@@ -154,11 +166,17 @@ export class Flashcards implements OnInit {
   }
 
   private async loadFlashcards() {
+    this.isLoading.set(true);
+    this.spinner.show();
     try {
       const flashcardGroup = await this.flashcardService.getFlashCardGroupById(this.groupId()!);
+      this.groupName.set(flashcardGroup.name);
       this.flashCards.set(flashcardGroup.flashcards);
     } catch (error) {
       console.error('Error loading flashcards: ', error);
+    } finally {
+      this.isLoading.set(false);
+      this.spinner.hide();
     }
   }
 }
