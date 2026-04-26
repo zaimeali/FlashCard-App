@@ -13,20 +13,35 @@
         <form [formGroup]="groupForm" class="group-form">
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Group Name</mat-label>
-            <input matInput formControlName="groupName" placeholder="Enter name" maxlength="20">
-            <mat-hint align="end">{{ groupForm.get('groupName')?.value?.length || 0 }}/20</mat-hint>
+            <input matInput formControlName="groupName" placeholder="Enter name" maxlength="25">
+            <mat-hint align="end">{{ groupForm.get('groupName')?.value?.length || 0 }}/25</mat-hint>
             @if (groupForm.get('groupName')?.hasError('required')) {
               <mat-error>Required</mat-error>
+            }
+            @if (groupForm.get('groupName')?.hasError('minlength')) {
+              <mat-error>Minimum 2 characters</mat-error>
+            }
+            @if (groupForm.get('groupName')?.hasError('startInvalid')) {
+              <mat-error>Cannot start with special character</mat-error>
+            }
+            @if (groupForm.get('groupName')?.hasError('unsafe')) {
+              <mat-error>Invalid characters or SQL detected</mat-error>
             }
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Group Description</mat-label>
             <textarea matInput formControlName="groupDescription" placeholder="Enter description" rows="8"
-              maxlength="200"></textarea>
-            <mat-hint align="end">{{ groupForm.get('groupDescription')?.value?.length || 0 }}/200</mat-hint>
+              maxlength="100"></textarea>
+            <mat-hint align="end">{{ groupForm.get('groupDescription')?.value?.length || 0 }}/100</mat-hint>
             @if (groupForm.get('groupDescription')?.hasError('required')) {
               <mat-error>Required</mat-error>
+            }
+            @if (groupForm.get('groupDescription')?.hasError('minlength')) {
+              <mat-error>Minimum 2 characters</mat-error>
+            }
+            @if (groupForm.get('groupDescription')?.hasError('unsafe')) {
+              <mat-error>Invalid characters or SQL detected</mat-error>
             }
           </mat-form-field>
         </form>

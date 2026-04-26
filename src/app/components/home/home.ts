@@ -13,6 +13,8 @@ import { FlashCardGroup } from '../../models/FlashCardGroup.model';
 import { FlashcardService } from '../../services/flashcards/flashcard-service';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { AlertService } from '../../services/alert/alert.service';
+import { SecurityValidators, sanitizeInput } from '../../utils/security/security-validators';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -87,12 +89,26 @@ export class Home implements OnInit {
   editName = signal<string>('');
   editDescription = signal<string>('');
 
+  isEditSafe = computed(() => {
+    const name = this.editName();
+    const desc = this.editDescription();
+    
+    const nameSafe = !SecurityValidators.noMaliciousContent()(new FormControl(name)) && 
+                   !SecurityValidators.startsWithAlphanumeric()(new FormControl(name)) &&
+                   name.length >= 2 && name.length <= 25;
+                   
+    const descSafe = !SecurityValidators.noMaliciousContent()(new FormControl(desc)) && 
+                   desc.length >= 2 && desc.length <= 100;
+    
+    return nameSafe && descSafe;
+  });
+
   // Search and Filtering
   searchTerm = signal<string>('');
 
   totalCards = computed(() => {
     if (this.isLoading()) return 0;
-    return this.flashCardsGroup().reduce((acc, group) => acc + (group.flashcards?.length || 0), 0);
+    return this.flashCardsGroup().length;
   });
 
   filteredGroups = computed(() => {
@@ -197,8 +213,8 @@ export class Home implements OnInit {
 
     const updatedGroup = {
       ...groupToUpdate,
-      name: this.editName(),
-      description: this.editDescription()
+      name: sanitizeInput(this.editName()),
+      description: sanitizeInput(this.editDescription())
     };
 
     try {

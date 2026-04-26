@@ -76,8 +76,8 @@ body {
   --mat-sys-background:       #1C1C1E;
   --mat-sys-on-background:    #F1F5F9;
 
-  --mat-sys-outline:          #2E2E30;
-  --mat-sys-outline-variant:  #3A3A3E;
+  --mat-sys-outline:          #444448;
+  --mat-sys-outline-variant:  #4C4C50;
 
   background-color: var(--mat-sys-background);
   color: var(--mat-sys-on-surface);
@@ -92,7 +92,7 @@ body {
   --fc-bg:      #1C1C1E;
   --fc-surface: #242426;
   --fc-card:    #2E2E32;
-  --fc-border:  #2E2E30;
+  --fc-border:  #444448;
   --fc-primary: #22C55E;
   --fc-accent:  #4ADE80;
   --fc-text:    #F1F5F9;

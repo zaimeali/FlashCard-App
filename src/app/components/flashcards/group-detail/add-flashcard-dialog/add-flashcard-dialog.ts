@@ -6,6 +6,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { SecurityValidators, sanitizeInput } from '../../../../utils/security/security-validators';
 
 export interface HintItem {
   hintId?: string;
@@ -45,8 +46,16 @@ export class AddFlashcardDialog {
     @Inject(MAT_DIALOG_DATA) public data: AddFlashcardData
   ) {
     this.flashcardForm = new FormGroup({
-      question: new FormControl(data?.question || '', [Validators.required, Validators.maxLength(100)]),
-      answer: new FormControl(data?.answer || '', [Validators.required, Validators.maxLength(300)]),
+      question: new FormControl(data?.question || '', [
+        Validators.required, 
+        Validators.maxLength(100),
+        SecurityValidators.noMaliciousContent()
+      ]),
+      answer: new FormControl(data?.answer || '', [
+        Validators.required, 
+        Validators.maxLength(300),
+        SecurityValidators.noMaliciousContent()
+      ]),
     });
 
     if (data?.hints) {
@@ -57,8 +66,11 @@ export class AddFlashcardDialog {
   isFormValid(): boolean {
     const q = this.flashcardForm.get('question')?.value;
     const a = this.flashcardForm.get('answer')?.value;
-    const allHintsFilled = this.hints().every(h => !!h.hint?.trim());
-    return !!(q?.trim() && a?.trim()) && allHintsFilled;
+    const allHintsSafeAndFilled = this.hints().every(h => {
+      const val = h.hint?.trim();
+      return !!val && !SecurityValidators.noMaliciousContent()(new FormControl(val));
+    });
+    return this.flashcardForm.valid && allHintsSafeAndFilled;
   }
 
   trackByFn(index: number): number {
@@ -87,11 +99,15 @@ export class AddFlashcardDialog {
 
   onSave() {
     if (this.flashcardForm.valid) {
-      // Filter out empty hints
-      const filteredHints = this.hints().filter(h => h.hint.trim() !== '');
+      // Filter out empty hints and sanitize
+      const filteredHints = this.hints()
+        .filter(h => h.hint.trim() !== '')
+        .map(h => ({ ...h, hint: sanitizeInput(h.hint) }));
+
       this.dialogRef.close({
         flashCardId: this.data.flashCardId,
-        ...this.flashcardForm.value,
+        question: sanitizeInput(this.flashcardForm.value.question),
+        answer: sanitizeInput(this.flashcardForm.value.answer),
         hints: filteredHints,
       });
     }
