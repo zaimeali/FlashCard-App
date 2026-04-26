@@ -33,7 +33,8 @@
             "styles": [
               "src/styles.scss",
               "node_modules/ngx-spinner/animations/fire.css"
-            ]
+            ],
+            "serviceWorker": "ngsw-config.json"
           },
           "configurations": {
             "production": {
