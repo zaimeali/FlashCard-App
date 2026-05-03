@@ -48,12 +48,12 @@ export class AddFlashcardDialog {
     this.flashcardForm = new FormGroup({
       question: new FormControl(data?.question || '', [
         Validators.required, 
-        Validators.maxLength(100),
+        Validators.maxLength(300),
         SecurityValidators.noMaliciousContent()
       ]),
       answer: new FormControl(data?.answer || '', [
         Validators.required, 
-        Validators.maxLength(300),
+        Validators.maxLength(1000),
         SecurityValidators.noMaliciousContent()
       ]),
     });
