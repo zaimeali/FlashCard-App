@@ -5,8 +5,8 @@
     <div class="form-row">
       <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
         <mat-label>Question</mat-label>
-        <input matInput formControlName="question" placeholder="Enter question" maxlength="25">
-        <mat-hint align="end">{{ flashcardForm.get('question')?.value?.length || 0 }}/25</mat-hint>
+        <input matInput formControlName="question" placeholder="Enter question" maxlength="300">
+        <mat-hint align="end">{{ flashcardForm.get('question')?.value?.length || 0 }}/300</mat-hint>
         @if (flashcardForm.get('question')?.hasError('required')) {
         <mat-error>Question is required</mat-error>
         }
@@ -19,8 +19,8 @@
     <div class="form-row">
       <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
         <mat-label>Answer</mat-label>
-        <textarea matInput formControlName="answer" placeholder="Enter answer" rows="3" maxlength="200"></textarea>
-        <mat-hint align="end">{{ flashcardForm.get('answer')?.value?.length || 0 }}/200</mat-hint>
+        <textarea matInput formControlName="answer" placeholder="Enter answer" rows="3" maxlength="1000"></textarea>
+        <mat-hint align="end">{{ flashcardForm.get('answer')?.value?.length || 0 }}/1000</mat-hint>
         @if (flashcardForm.get('answer')?.hasError('required')) {
         <mat-error>Answer is required</mat-error>
         }
