@@ -51,14 +51,20 @@
 .hints-list {
   display: flex;
   flex-direction: column;
-  gap: 0; /* No gap */
+  gap: 0.75rem;
 }
 
 .hint-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: -0.5rem; /* Slight overlap to compensate for internal padding */
+  display: block;
+  margin: 0;
+}
+
+.mat-form-field-appearance-outline {
+  min-height: 72px;
+}
+
+.mat-form-field-subscript-wrapper {
+  margin-top: 0.25rem;
 }
 
 .cancel-btn {
