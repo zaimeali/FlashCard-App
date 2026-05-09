@@ -352,6 +352,25 @@
       }
     }
   }
+
+  @media (max-width: 768px) {
+    padding: 0.85rem;
+
+    .fc-hints-header {
+      h3 {
+        font-size: 1rem;
+      }
+    }
+
+    .fc-hints-list {
+      padding-left: 1rem;
+
+      li {
+        font-size: 0.95rem;
+        margin-bottom: 0.4rem;
+      }
+    }
+  }
 }
 
 .fc-info-bar {
